@@ -37,7 +37,7 @@ type Expert = {
 
 type Wilayah = { id: string; nama: string };
 
-export default function RecommendPage() {
+export default function Recommendpage() {
   const [title, setTitle] = useState<string>("");
   const [pendidikan, setPendidikan] = useState<string>("");
   const [bidangKeahlian, setBidangKeahlian] = useState<string>("");

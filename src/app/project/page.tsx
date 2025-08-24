@@ -21,7 +21,7 @@ type Program = {
   date?: string;
 };
 
-const page = () => {
+const Project = () => {
   const [project, setProject] = useState<Program[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -101,4 +101,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Project;

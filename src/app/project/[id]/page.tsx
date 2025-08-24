@@ -13,7 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const DetailProjectPage = () => {
+const Detailproject = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>(null);
@@ -25,7 +25,7 @@ const DetailProjectPage = () => {
           `http://localhost:8000/Program/${id}/detail`
         );
         setData(res.data);
-        console.log('data',data)
+        console.log("data", data);
       } catch (error) {
         console.error("Error fetching project detail", error);
       } finally {
@@ -174,4 +174,4 @@ const DetailProjectPage = () => {
   );
 };
 
-export default DetailProjectPage;
+export default Detailproject;

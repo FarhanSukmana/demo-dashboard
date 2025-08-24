@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
-import { TicketCheck, Coffee } from "lucide-react"; // 🔹 Ikon
+import { TicketCheck } from "lucide-react"; // 🔹 Ikon
 
 interface Pembelian {
   tanggal: string;
@@ -33,7 +33,7 @@ const Page = () => {
   const [data, setData] = useState<Person[]>([]);
 
   const parseSheet = (rows: string[][]) => {
-    const persons: Record<string, any> = {};
+    const persons: Record<string, Person> = {};
 
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
@@ -84,6 +84,7 @@ const Page = () => {
     return Object.values(persons);
   };
 
+useEffect(() => {
   const fetchData = async () => {
     const url =
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vSjPJCWqdJ24LoJSzo3hfsclDREZtrMqgxHiR3V2Homy1JFHBCsNCKXwCRwMnKwrIsQ_L7TpHg6yCko/pub?gid=2021372793&single=true&output=csv";
@@ -94,14 +95,13 @@ const Page = () => {
     setData(parseSheet(rows));
   };
 
-  useEffect(() => {
-    console.log(data);
-    if (data.length > 0) {
-      console.log("Formatted JSON:", JSON.stringify(data, null, 2));
-    } else {
-      fetchData();
-    }
-  }, [data]);
+  if (data.length === 0) {
+    fetchData();
+  } else {
+    console.log("Formatted JSON:", JSON.stringify(data, null, 2));
+  }
+}, [data]);
+
 
   const parseDate = (str: string) => {
     if (!str) return null;

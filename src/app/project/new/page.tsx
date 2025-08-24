@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 
-const page = () => {
+const Newproject = () => {
   const router = useRouter()
   const [form, setForm] = useState({
     name: '',
@@ -103,4 +103,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Newproject;

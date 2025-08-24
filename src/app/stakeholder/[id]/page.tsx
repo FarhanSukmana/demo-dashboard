@@ -17,7 +17,7 @@ interface Stakeholder {
   location?: string;
 }
 
-const page = () => {
+const Stakeholderdetail = () => {
   const { id } = useParams();
   const router = useRouter();
   const [stakeHolder, setStakeHolder] = useState<Stakeholder | null>(null);
@@ -30,8 +30,8 @@ const page = () => {
         const res = await fetch(`http://localhost:8000/Stakeholder/${id}`);
         const data = await res.json();
         setStakeHolder(data);
-        console.log(data)
-        console.log("res",res)
+        console.log(data);
+        console.log("res", res);
       } catch (error) {
         console.log("=Error Fetching Data: ", error);
       } finally {
@@ -90,4 +90,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Stakeholderdetail;

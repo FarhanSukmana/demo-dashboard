@@ -24,7 +24,7 @@ interface Stakeholder {
   location?: string;
 }
 
-const page = () => {
+const Stakeholderpage = () => {
   const [data, setData] = useState<Stakeholder[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -35,7 +35,7 @@ const page = () => {
       .then((result) => setData(result))
       .catch((err) => console.log("Error Fetching stakeholder", err))
       .finally(() => setLoading(false));
-      console.log(data)
+    console.log(data);
   }, []);
 
   return (
@@ -70,12 +70,18 @@ const page = () => {
                     <TableCell>{stakeholder.name}</TableCell>
                     <TableCell>{stakeholder.organization || "-"}</TableCell>
                     <TableCell>{stakeholder.category || "-"}</TableCell>
-                    <TableCell>{stakeholder.power||"-"}</TableCell>
-                    <TableCell>{stakeholder.interest||"-"}</TableCell>
-                    <TableCell>{stakeholder.location||"-"}</TableCell>
+                    <TableCell>{stakeholder.power || "-"}</TableCell>
+                    <TableCell>{stakeholder.interest || "-"}</TableCell>
+                    <TableCell>{stakeholder.location || "-"}</TableCell>
                     <TableCell>
                       <Link href={`stakeholder/${stakeholder.id}`}>
-                      <Button size='sm' variant='outline' className="cursor-pointer" >Detail</Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="cursor-pointer"
+                        >
+                          Detail
+                        </Button>
                       </Link>
                     </TableCell>
                   </TableRow>
@@ -89,4 +95,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Stakeholderpage;

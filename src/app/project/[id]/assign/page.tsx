@@ -21,7 +21,7 @@ interface stakeholder{
   name:string;
 }
 
-const page = () => {
+const Assign = () => {
   const router = useRouter()
   const params = useParams()
   const projectId = params.id as string;
@@ -114,4 +114,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Assign;

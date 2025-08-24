@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const Page = () => {
+const Search = () => {
   const [formData, setFormData] = useState({
     nama: "",
     minuman: "",
@@ -88,4 +88,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Search;
