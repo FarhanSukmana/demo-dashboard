@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
 import { TicketCheck } from "lucide-react"; // 🔹 Ikon
+import { useRouter } from "next/navigation";
 
 interface Pembelian {
   tanggal: string;
@@ -31,6 +32,7 @@ interface Person {
 
 const Page = () => {
   const [data, setData] = useState<Person[]>([]);
+  const router = useRouter();
 
   const parseSheet = (rows: string[][]) => {
     const persons: Record<string, Person> = {};
@@ -84,24 +86,24 @@ const Page = () => {
     return Object.values(persons);
   };
 
-useEffect(() => {
-  const fetchData = async () => {
-    const url =
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vSjPJCWqdJ24LoJSzo3hfsclDREZtrMqgxHiR3V2Homy1JFHBCsNCKXwCRwMnKwrIsQ_L7TpHg6yCko/pub?gid=2021372793&single=true&output=csv";
+  useEffect(() => {
+    const fetchData = async () => {
+      const url =
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vSjPJCWqdJ24LoJSzo3hfsclDREZtrMqgxHiR3V2Homy1JFHBCsNCKXwCRwMnKwrIsQ_L7TpHg6yCko/pub?gid=2021372793&single=true&output=csv";
 
-    const res = await fetch(url);
-    const text = await res.text();
-    const rows = text.split("\n").map((r) => r.split(","));
-    setData(parseSheet(rows));
-  };
+      const res = await fetch(url);
+      const text = await res.text();
+      const rows = text.split("\n").map((r) => r.split(","));
+      setData(parseSheet(rows));
+      localStorage.setItem("members", JSON.stringify(parseSheet(rows)));
+    };
 
-  if (data.length === 0) {
-    fetchData();
-  } else {
-    console.log("Formatted JSON:", JSON.stringify(data, null, 2));
-  }
-}, [data]);
-
+    if (data.length === 0) {
+      fetchData();
+    } else {
+      console.log("Formatted JSON:", JSON.stringify(data, null, 2));
+    }
+  }, [data]);
 
   const parseDate = (str: string) => {
     if (!str) return null;
@@ -142,7 +144,14 @@ useEffect(() => {
 
                   return (
                     <TableRow key={i}>
-                      <TableCell className="font-bold">
+                      <TableCell
+                        className="font-bold text-blue-600 cursor-pointer hover:underline"
+                        onClick={() =>
+                          router.push(
+                            `/inbox/${encodeURIComponent(person.Nama_Member)}`
+                          )
+                        }
+                      >
                         {person.Nama_Member}
                       </TableCell>
                       <TableCell>{loyalti.Tanggal_awal}</TableCell>
