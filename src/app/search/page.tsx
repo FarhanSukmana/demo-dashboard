@@ -2,15 +2,17 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const Search = () => {
+const InputPembelian = () => {
   const [formData, setFormData] = useState({
-    nama: "",
-    minuman: "",
-    tgl: "",
-    qty: 1,
+    Tanggal: "",
+    Nama: "",
+    Menu: "",
+    Qty: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -22,7 +24,7 @@ const Search = () => {
 
     try {
       const res = await axios.post(
-        "https://script.google.com/macros/s/AKfycbxUA1lV4PAUDZ0_Q68rrrSpVquiJ1wGPIKJG5L4CPNY6DwIuzqnSX2FwIeSFfclwVjI5A/exec",
+        "https://script.google.com/macros/s/AKfycbyOuibsqWmuEFE5cU343b1WPrVzBXnRkOLiZ0Ef-wl-qo3motcIPuEl87Ta3rIa_Qyn/exec",
         formData,
         {
           headers: {
@@ -32,16 +34,11 @@ const Search = () => {
       );
 
       console.log("Response dari Google Apps Script:", res.data);
-      alert("Data berhasil dikirim!");
+      console.log('datanya :',formData)
+      alert("Data berhasil dikirim ke Spreadsheet!");
+      setFormData({ Tanggal: "", Nama: "", Menu: "", Qty: "" });
     } catch (error: any) {
       console.error("Error kirim data:", error);
-      if (error.response) {
-        console.error("Response error:", error.response.data);
-      } else if (error.request) {
-        console.error("Request error:", error.request);
-      } else {
-        console.error("Setup error:", error.message);
-      }
       alert("Gagal mengirim data");
     }
   };
@@ -51,36 +48,44 @@ const Search = () => {
       <h1 className="text-xl font-bold mb-4">Input Pembelian</h1>
       <form onSubmit={handleSubmit} className="space-y-2">
         <input
-          type="text"
-          name="nama"
-          placeholder="Nama"
-          value={formData.nama}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
-        <input
-          type="text"
-          name="minuman"
-          placeholder="Jenis Minuman"
-          value={formData.minuman}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
-        <input
           type="date"
-          name="tgl"
-          value={formData.tgl}
+          name="Tanggal"
+          value={formData.Tanggal}
           onChange={handleChange}
           className="border p-2 w-full"
+          required
         />
         <input
-          type="number"
-          name="qty"
-          value={formData.qty}
+          type="text"
+          name="Nama"
+          placeholder="Nama Member"
+          value={formData.Nama}
           onChange={handleChange}
           className="border p-2 w-full"
+          required
         />
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+        <input
+          type="text"
+          name="Menu"
+          placeholder="Jenis Minuman"
+          value={formData.Menu}
+          onChange={handleChange}
+          className="border p-2 w-full"
+          required
+        />
+        <input
+          type="text"
+          name="Qty"
+          placeholder="Qty (angka atau 'reward')"
+          value={formData.Qty}
+          onChange={handleChange}
+          className="border p-2 w-full"
+          required
+        />
+        <button
+          type="submit"
+          className="bg-blue-500 text-white p-2 rounded w-full"
+        >
           Submit
         </button>
       </form>
@@ -88,4 +93,4 @@ const Search = () => {
   );
 };
 
-export default Search;
+export default InputPembelian;
