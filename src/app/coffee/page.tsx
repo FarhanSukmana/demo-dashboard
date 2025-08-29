@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
-import { TicketCheck } from "lucide-react";
+import { TicketCheck, Coffee } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -136,7 +136,7 @@ const Page = () => {
         setMembers([]);
       }
     }
-  }, [data]);
+  }, []);
 
   const parseDate = (str: string) => {
     if (!str) return null;
@@ -165,11 +165,11 @@ const Page = () => {
       );
 
       console.log("Response dari Google Apps Script:", res.data);
-      toast.success("Data Transaksi berhasil ditambahkan"); 
+      toast.success("Data Transaksi berhasil ditambahkan");
       setFormData({ Tanggal: "", Nama: "", Menu: "", Qty: "" });
     } catch (error) {
       console.error("Error kirim data:", error);
-      toast.error("Data Transaksi berhasil ditambahkan"); 
+      toast.error("Data Transaksi berhasil ditambahkan");
     } finally {
       setLoading(false);
     }
@@ -312,7 +312,7 @@ const Page = () => {
                   return (
                     <TableRow key={i}>
                       <TableCell
-                        className="font-bold text-blue-600 cursor-pointer hover:underline"
+                        className="font-bold underline underline-offset-auto cursor-pointer hover:scale-105 transition-transform "
                         onClick={() =>
                           router.push(
                             `/coffee/${encodeURIComponent(person.Nama_Member)}`
@@ -325,7 +325,10 @@ const Page = () => {
                       <TableCell>{loyalti.Tanggal_exp}</TableCell>
                       <TableCell>
                         {loyalti.Reward_1 ? (
-                          loyalti.Reward_1
+                          <div className="flex gap-2">
+                            <Coffee className="text-amber-800" />
+                            {/* {loyalti.Reward_1} */}
+                          </div>
                         ) : pembelianCount >= 5 ? (
                           <TicketCheck className="text-green-600" />
                         ) : (

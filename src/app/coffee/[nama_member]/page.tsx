@@ -35,7 +35,7 @@ const DetailPage = () => {
       {memberData.Loyalti.map((loyalti: any, idx: number) => (
         <Card key={idx} className="shadow-md">
           <CardHeader>
-            <CardTitle>Loyalti {idx + 1}</CardTitle>
+            <CardTitle>Loyalti +{idx + 1}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Info utama loyalti */}

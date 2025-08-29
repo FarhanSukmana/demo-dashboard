@@ -64,16 +64,16 @@ export default function Recommendpage() {
     try {
       setIsLoading(true);
       console.log(title, pendidikan, bidangKeahlian, provinsi?.nama)
-      // const response = await axios.post<{ recommended_experts: Expert[] }>(
-      //   "http://localhost:8000/recommend",
-      //   {
-      //     title,
-      //     pendidikan,
-      //     bidang_keahlian: bidangKeahlian.split(",").map((item) => item.trim()),
-      //     daerah: provinsi?.nama || "",
-      //   }
-      // );
-      // setResult(response.data.recommended_experts);
+      const response = await axios.post<{ recommended_experts: Expert[] }>(
+        "http://localhost:8000/recommend",
+        {
+          title,
+          pendidikan,
+          bidang_keahlian: bidangKeahlian.split(",").map((item) => item.trim()),
+          daerah: provinsi?.nama || "",
+        }
+      );
+      setResult(response.data.recommended_experts);
     } catch (error) {
       console.error("Error in /recommend:", error);
     } finally {
