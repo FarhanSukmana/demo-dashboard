@@ -1,35 +1,105 @@
-'use client'
-import { LogOut, Moon, Settings, Sun, User } from "lucide-react";
-import Link from "next/link";
+"use client";
+import { Moon, Sun, Bell } from "lucide-react";
 import React from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { useTheme } from "next-themes";
 import { SidebarTrigger } from "./ui/sidebar";
+import { usePathname } from "next/navigation";
 
-const Navbar = () => {
-  const {setTheme} = useTheme()
+// contoh data notifikasi
+const notifications = [
+  { id: 1, message: "Rumah #12 ditambahkan", time: "5 menit lalu" },
+  { id: 2, message: "Kegiatan Rapat Bulanan disetujui", time: "15 menit lalu" },
+  {
+    id: 3,
+    message: "Kendaraan B1234AB memerlukan service",
+    time: "1 jam lalu",
+  },
+  { id: 4, message: "Ruangan Meeting A1 dibooking", time: "2 jam lalu" },
+  { id: 5, message: "Perizinan kegiatan X ditolak", time: "3 jam lalu" },
+];
+
+const Navbar: React.FC = () => {
+  const { setTheme } = useTheme();
+  const pathname = usePathname();
+
+  const getTitle = (): string => {
+    if (pathname === "/") return "Dashboard";
+
+    // Ambil segmen pertama setelah /
+    const segment = pathname?.split("/")[1] ?? "";
+
+    const specialCases: Record<string, string> = {
+      "recommendation-expert": "Recommendation Expert",
+    };
+
+    if (specialCases[segment]) return specialCases[segment];
+    if (!segment) return "Dashboard";
+
+    // Ubah "rumah-negara" -> "Rumah Negara"
+    return segment
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
   return (
     <nav className="flex justify-between w-full h-full p-4 bg-sidebar rounded-lg">
-      <SidebarTrigger />
+      <div className="flex gap-4">
+        <SidebarTrigger />
+        <h1 className="text-black dark:text-white font-semibold text-xl">
+          {getTitle()}
+        </h1>
+      </div>
+
       <div className="flex items-center gap-4">
-        <Link href={"/"} className="text-black dark:text-white">Dashboard</Link>
+
+        {/* Notification */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon" className="relative">
+              <Bell className="h-[1.2rem] w-[1.2rem]" />
+              {/* indikator jumlah notifikasi */}
+              <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-white text-[10px] flex items-center justify-center">
+                {notifications.length}
+              </span>
+              <span className="sr-only">Notifications</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-64">
+            <DropdownMenuLabel>Notifikasi</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {notifications.map((notif) => (
+              <DropdownMenuItem
+                key={notif.id}
+                className="flex flex-col items-start"
+              >
+                <span className="text-sm text-black dark:text-white">
+                  {notif.message}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  {notif.time}
+                </span>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         {/* DarkMode */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
-              <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-              <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-              <span className="sr-only">Toogle Theme</span>
+              <Sun className="h-[1.2rem] w-[1.2rem] transition-all dark:hidden" />
+              <Moon className="absolute h-[1.2rem] w-[1.2rem] hidden dark:block transition-all" />
+              <span className="sr-only">Toggle Theme</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" alignOffset={15}>
@@ -40,36 +110,7 @@ const Navbar = () => {
               Dark
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setTheme("system")}>
-              system
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        {/* Profile */}
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Avatar>
-              <AvatarImage
-                src="https://avatars.githubusercontent.com/u/142285240"
-                alt="@shadcn"
-              />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent sideOffset={15}>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <User className="w-[1.2rem] h-[1.2rem] mr-2" />
-              Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Settings className="w-[1.2rem] h-[1.2rem] mr-2" />
-              Setting
-            </DropdownMenuItem>
-            <DropdownMenuItem variant="destructive">
-              <LogOut className="w-[1.2rem] h-[1.2rem] mr-2" />
-              Sign Out
+              System
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

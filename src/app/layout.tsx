@@ -46,7 +46,7 @@ export default async function RootLayout({
             <AppSidebar />
             <div className="flex flex-col w-full h-full pl-4">
               <Navbar />
-              <div className="p-4 ">{children}</div>
+              <div className="py-4 pr-4">{children}</div>
             </div>
             <Toaster position="top-right" richColors />
           </SidebarProvider>

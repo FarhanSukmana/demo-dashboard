@@ -3,15 +3,20 @@ import {
   Calendar,
   ChevronUp,
   Home,
-  Coffee,
-  Plus,
-  Search,
+  // Coffee,
+  // Plus,
+  // Search,
   Settings,
   Users,
   FolderHeart,
-  ChevronDown,
-  Panda,
-  Notebook
+  // ChevronDown,
+  // Panda,
+  // Notebook,
+  // User,
+  LogOut,
+  Building,
+  Video,
+  Car
 } from "lucide-react";
 
 import {
@@ -19,16 +24,16 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupAction,
+  // SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
+  // SidebarMenuSub,
+  // SidebarMenuSubButton,
+  // SidebarMenuSubItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
@@ -37,13 +42,14 @@ import {
   DropdownMenu,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import { DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu";
+import { DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "./ui/collapsible";
+// import {
+//   Collapsible,
+//   CollapsibleContent,
+//   CollapsibleTrigger,
+// } from "./ui/collapsible";
+import { Separator } from "./ui/separator";
 
 // Menu items.
 const items = [
@@ -53,18 +59,28 @@ const items = [
     icon: Home,
   },
   {
-    title: "Coffee",
-    url: "/coffee",
-    icon: Coffee,
+    title: "Rumah Negara",
+    url: "/rumah-negara",
+    icon: Building,
   },
   {
-    title: "Search",
-    url: "/search",
-    icon: Search,
+    title: "Room Meeting",
+    url: "/room-meeting",
+    icon: Video,
+  },
+  {
+    title: "Kendaraan Dinas",
+    url: "/kendaraan-dinas",
+    icon: Car,
+  },
+  {
+    title: "Perizinan Kegiatan",
+    url: "/perizinan-kegiatan",
+    icon: Calendar,
   },
   {
     title: "Settings",
-    url: "#",
+    url: "/settings",
     icon: Settings,
   },
 ];
@@ -80,40 +96,28 @@ const expert = [
     icon: Users,
   },
 ];
-// const stakeholder = [
-//   {
-//     title : "Stakehoder List",
-//     url : '/stakeholder',
-//     icon :Panda
-//   }
-//   {
-//     title : "Stakehoder List",
-//     url : '/stakeholder',
-//     icon :Panda
-//   }
-//     {
-//       title : "Stakehoder List",
-//       url : '/stakeholder',
-//       icon :Panda
-//     }
-// ]
 
 const AppSidebar = () => (
-  <Sidebar collapsible="icon">
+  <Sidebar collapsible="icon"  >
     {/* Header */}
     <SidebarHeader className="py-4">
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton asChild>
             <Link href={"/"}>
-              <Image src="vercel.svg" alt="logo" width={20} height={20} />
-              <span>Dashboard</span>
+              <Image
+                src="/assets/img/kemenkumham.png"
+                alt="logo"
+                width={20}
+                height={20}
+              />
+              <span>Kemenkumham SI</span>
             </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>
     </SidebarHeader>
-    <SidebarSeparator />
+    <Separator />
     {/* Content */}
     <SidebarContent>
       {/* GROUP APPLICATION */}
@@ -135,7 +139,7 @@ const AppSidebar = () => (
         </SidebarGroupContent>
       </SidebarGroup>
       {/* COLLAPSIBLE */}
-      <Collapsible defaultOpen className="group/collapsible">
+      {/* <Collapsible defaultOpen className="group/collapsible">
         <SidebarGroup>
           <SidebarGroupLabel asChild>
             <CollapsibleTrigger>
@@ -158,9 +162,9 @@ const AppSidebar = () => (
             </SidebarMenu>
           </CollapsibleContent>
         </SidebarGroup>
-      </Collapsible>
+      </Collapsible> */}
       {/* GROUP PROJECT */}
-      <SidebarGroup>
+      {/* <SidebarGroup>
         <SidebarGroupLabel>Project(?)</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
@@ -202,7 +206,7 @@ const AppSidebar = () => (
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroupContent>
-      </SidebarGroup>
+      </SidebarGroup> */}
     </SidebarContent>
     {/* Footer */}
     <SidebarSeparator />
@@ -213,27 +217,29 @@ const AppSidebar = () => (
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton>
                 <Avatar>
-                  <AvatarImage
-                    src="https://avatars.githubusercontent.com/u/142285240"
-                    alt="@shadcn"
-                  />
+                  <AvatarImage src="/assets/img/unnamed.png" alt="profile" />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
-                Muhammad Farhan <ChevronUp className="ml-auto" />
+                Siti Rahma <ChevronUp className="ml-auto" />
               </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent
+              sideOffset={10}
               side="top"
-              className="w-[--radix-popper-anchor-width]"
+              align="start"
+              className=""
             >
-              <DropdownMenuItem>
-                <span>Account</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <span>Setting</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <span>Sign Out</span>
+              <div className="flex items-center justify-center gap-4 p-2">
+                {/* <Avatar>
+                  <AvatarImage src="/assets/img/unnamed.png" alt="profile" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar> */}
+                Siti Rahma
+              </div>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem variant="destructive">
+                <LogOut className="w-[1.2rem] h-[1.2rem] mr-2" />
+                Sign Out
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
