@@ -75,14 +75,14 @@ export default function AddRoomMeetingPage() {
   return (
     <div className="space-y-6 pb-10">
       {/* Button Back */}
-      <div className="flex gap-x-4">
+      <div className="flex gap-x-4 items-center">
         <Button
           variant="ghost"
           className="flex items-center gap-2"
           onClick={() => router.back()}
         >
           <ArrowLeft className="h-4 w-4" />
-          Back
+          Kembali
         </Button>
         <h1 className="text-xl font-semibold">Tambah Ruangan Meeting</h1>
       </div>
@@ -109,7 +109,7 @@ export default function AddRoomMeetingPage() {
               </label>
               <Select value={type} onValueChange={setType}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Type" />
+                  <SelectValue placeholder="Tipe" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Offline">Offline</SelectItem>
@@ -123,13 +123,13 @@ export default function AddRoomMeetingPage() {
           <div className="flex flex-col w-full gap-2">
             <label className="text-sm text-[#969696]">Nama Ruangan*</label>
             <Input
-              placeholder="Executive Meeting Room"
+              placeholder="Ruang Rapat Eksekutif"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
 
-          <div className="flex flex-col w-full gap-2">
+          <div className="flex flex-col w-full gap-2 mt-4">
             <label className="text-sm text-[#969696]">Status</label>
             <Select value={status} onValueChange={setStatus}>
               <SelectTrigger className="w-full">
@@ -146,7 +146,7 @@ export default function AddRoomMeetingPage() {
 
       {/* Offline Details */}
       <Card className="rounded-md p-4 ">
-        <CardTitle>Offline Details</CardTitle>
+        <CardTitle>Details Ruangan Offline</CardTitle>
         <CardContent className="flex flex-col w-full h-full p-0 gap-y-4">
           <div className="flex w-full h-full gap-4 mb-4 md:flex-row flex-col">
             <div className="flex flex-col w-full gap-2">
@@ -171,7 +171,7 @@ export default function AddRoomMeetingPage() {
           <div className="flex flex-col w-full gap-2">
             <label className="text-sm text-[#969696]">Alamat *</label>
             <Textarea
-              placeholder="Executive floor, west wing"
+              placeholder="Lantai Ekslusif"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
             />
@@ -193,7 +193,7 @@ export default function AddRoomMeetingPage() {
         <CardContent className="flex flex-col w-full h-full p-0 gap-y-4">
           <div>
             <p className="text-sm text-gray-500 mb-2">
-              Select available facilities for this room:
+              Pilih fasilitas yang tersedia untuk ruangan ini:
             </p>
             <div className="flex flex-wrap gap-2">
               {ALL_FACILITIES.map((facility) => {
@@ -243,7 +243,7 @@ export default function AddRoomMeetingPage() {
             onChange={(e) => setNotes(e.target.value)}
           />
           <span className="text-[10px] text-[#969696]">
-            {notes.length}/1000 characters
+            {notes.length}/1000 Karakter
           </span>
         </CardContent>
       </Card>

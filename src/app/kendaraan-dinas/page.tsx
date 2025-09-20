@@ -129,10 +129,10 @@ export default function KendaraanDinasPage() {
                 <SelectValue placeholder="Condition" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All</SelectItem>
-                <SelectItem value="Good">Good</SelectItem>
-                <SelectItem value="Fair">Fair</SelectItem>
-                <SelectItem value="Needs Repair">Needs Repair</SelectItem>
+                <SelectItem value="all">Semua</SelectItem>
+                <SelectItem value="Good">Baik</SelectItem>
+                <SelectItem value="Fair">Cukup</SelectItem>
+                <SelectItem value="Needs-Repair">Butuh Perbaikan</SelectItem>
               </SelectContent>
             </Select>
             <Select onValueChange={setFilterFuel} value={filterFuel}>
@@ -140,8 +140,8 @@ export default function KendaraanDinasPage() {
                 <SelectValue placeholder="Fuel" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All</SelectItem>
-                <SelectItem value="Gasoline">Gasoline</SelectItem>
+                <SelectItem value="all">Semua</SelectItem>
+                <SelectItem value="Gasoline">Bensin</SelectItem>
                 <SelectItem value="Diesel">Diesel</SelectItem>
               </SelectContent>
             </Select>
@@ -150,11 +150,11 @@ export default function KendaraanDinasPage() {
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All</SelectItem>
-                <SelectItem value="Available">Available</SelectItem>
-                <SelectItem value="In Use">In Use</SelectItem>
-                <SelectItem value="Inactive">Inactive</SelectItem>
-                <SelectItem value="Maintenance">Maintenance</SelectItem>
+                <SelectItem value="all">Semua</SelectItem>
+                <SelectItem value="Available">Tersedia</SelectItem>
+                <SelectItem value="In Use">Sedang Digunakan</SelectItem>
+                <SelectItem value="Inactive">Tidak Aktif</SelectItem>
+                <SelectItem value="Maintenance">Dalam Perawatan</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -174,14 +174,14 @@ export default function KendaraanDinasPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Plate</TableHead>
-                <TableHead>Brand/Model</TableHead>
-                <TableHead>Year</TableHead>
-                <TableHead>Fuel</TableHead>
+                <TableHead>Plat Nomor</TableHead>
+                <TableHead>Merek/Model</TableHead>
+                <TableHead>Tahun</TableHead>
+                <TableHead>Bahan Bakar</TableHead>
                 <TableHead>Odometer (km)</TableHead>
-                <TableHead>Condition</TableHead>
+                <TableHead>Kondisi</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead className="text-right">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -206,7 +206,11 @@ export default function KendaraanDinasPage() {
                           : "bg-yellow-500"
                       }
                     >
-                      {vehicle.condition}
+                      {vehicle.condition === "Good"
+                        ? "Baik"
+                        : vehicle.condition === "Fair"
+                        ? "Cukup"
+                        : "Butuh Perbaikan"}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -221,7 +225,13 @@ export default function KendaraanDinasPage() {
                           : "bg-yellow-500"
                       }
                     >
-                      {vehicle.status}
+                      {vehicle.status === "Available"
+                        ? "Tersida"
+                        : vehicle.status === "In Use"
+                        ? "Sedang Digunakan"
+                        : vehicle.status === "Inactive"
+                        ? "Tidak Aktif"
+                        : "Dalam Perawatan"}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
@@ -241,7 +251,7 @@ export default function KendaraanDinasPage() {
                             )
                           }
                         >
-                          View
+                          Lihat Detail
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() =>
@@ -250,13 +260,13 @@ export default function KendaraanDinasPage() {
                             )
                           }
                         >
-                          Edit
+                          Ubah
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="text-red-600"
                           onClick={() => handleDelete(vehicle.plate)}
                         >
-                          Delete
+                          Hapus
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

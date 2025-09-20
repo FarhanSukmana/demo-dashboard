@@ -74,19 +74,23 @@ export default function RumahNegaraDetailPage() {
           className="flex items-center gap-2"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back
+          Kembali
         </Button>
         <h1 className="text-xl font-semibold">Detail Rumah Negara</h1>
         <Badge
           className={
             house.status === "Available"
-              ? "bg-green-500"
+              ? "bg-green-500 text-white"
               : house.status === "Occupied"
-              ? "bg-blue-500"
-              : "bg-yellow-500"
+              ? "bg-blue-500 text-white"
+              : "bg-yellow-500 text-black"
           }
         >
-          {house.status}
+          {house.status === "Available"
+            ? "Tersedia"
+            : house.status === "Occupied"
+            ? "Dihuni"
+            : "Perawatan"}
         </Badge>
       </div>
 
@@ -156,20 +160,38 @@ export default function RumahNegaraDetailPage() {
                 <div className="flex w-full gap-2 ">
                   <div className="flex flex-col w-full">
                     <p className="text-sm text-gray-500">Kondisi</p>
-                    <Badge className="bg-green-500">{house.condition}</Badge>
+                    <Badge
+                      className={
+                        house.condition === "Good"
+                          ? "bg-green-500 text-white"
+                          : house.condition === "Fair"
+                          ? "bg-blue-500 text-white"
+                          : "bg-yellow-500 text-black"
+                      }
+                    >
+                      {house.condition === "Good"
+                        ? "Baik"
+                        : house.condition === "Fair"
+                        ? "Cukup"
+                        : "Perlu Perbaikan"}
+                    </Badge>
                   </div>
                   <div className="flex flex-col w-full">
                     <p className="text-sm text-gray-500">Status</p>
                     <Badge
                       className={
                         house.status === "Available"
-                          ? "bg-green-500"
+                          ? "bg-green-500 text-white"
                           : house.status === "Occupied"
-                          ? "bg-blue-500"
-                          : "bg-yellow-500"
+                          ? "bg-blue-500 text-white"
+                          : "bg-yellow-500 text-black"
                       }
                     >
-                      {house.status}
+                      {house.status === "Available"
+                        ? "Tersedia"
+                        : house.status === "Occupied"
+                        ? "Dihuni"
+                        : "Perawatan"}
                     </Badge>
                   </div>
                 </div>
@@ -177,28 +199,32 @@ export default function RumahNegaraDetailPage() {
                 {/* 6 */}
                 <div className="flex w-full gap-2 ">
                   <div className="flex flex-col w-full">
-                    <p className="text-sm text-gray-500">Electric Meter No</p>
+                    <p className="text-sm text-gray-500">
+                      Nomor Meteran Listrik
+                    </p>
                     <p>{house.electricmeter}</p>
                   </div>
                   <div className="flex flex-col w-full">
-                    <p className="text-sm text-gray-500">Water Meter No</p>
+                    <p className="text-sm text-gray-500">Nomor Meteran Air</p>
                     <p>{house.watermeter}</p>
                   </div>
                 </div>
                 {/* 7 */}
                 <div className="flex w-full gap-2 ">
                   <div className="flex flex-col w-full">
-                    <p className="text-sm text-gray-500">Asset Number</p>
+                    <p className="text-sm text-gray-500">Nomor Aset</p>
                     <p>{house.assetNumber}</p>
                   </div>
                   <div className="flex flex-col w-full">
-                    <p className="text-sm text-gray-500">Certificate No</p>
+                    <p className="text-sm text-gray-500">Nomor Sertifikat</p>
                     <p>{house.certificateNumber}</p>
                   </div>
                 </div>
                 {/* 8 */}
                 <div className="flex flex-col w-full">
-                  <p className="text-sm text-gray-500">No active occupancy.</p>
+                  <p className="text-sm text-gray-500">
+                    Tidak ada hunian aktif.
+                  </p>
                   <p>{house.notes}</p>
                 </div>
               </div>
@@ -208,9 +234,9 @@ export default function RumahNegaraDetailPage() {
           {/* Occupancy Card */}
           <Card className="flex w-full md:col-span-2 rounded-2xl gap-y-2">
             <CardContent className="flex flex-col gap-y-2">
-              <h2 className="text-lg font-semibold">Occupancy</h2>
+              <h2 className="text-lg font-semibold">Hunian</h2>
               {/* 1 */}
-              <p className="text-gray-500">No active occupancy.</p>
+              <p className="text-gray-500">Tidak ada hunian aktif.</p>
             </CardContent>
           </Card>
         </div>
@@ -220,14 +246,14 @@ export default function RumahNegaraDetailPage() {
             <CardContent className="p-6 space-y-3">
               <h2 className="text-lg font-semibold">Audit</h2>
               <div>
-                <p className="text-sm text-gray-500">Created</p>
+                <p className="text-sm text-gray-500">Dibuat pada:</p>
                 <p>{house.createdAt}</p>
-                <p className="text-xs text-gray-400">by {house.createdBy}</p>
+                <p className="text-xs text-gray-400">oleh {house.createdBy}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Last Updated</p>
+                <p className="text-sm text-gray-500">Terakhir Diubah</p>
                 <p>{house.updatedAt}</p>
-                <p className="text-xs text-gray-400">by {house.updatedBy}</p>
+                <p className="text-xs text-gray-400">oleh {house.updatedBy}</p>
               </div>
             </CardContent>
           </Card>

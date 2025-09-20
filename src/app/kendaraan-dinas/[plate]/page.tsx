@@ -55,9 +55,9 @@ export default function KegiatanDetails() {
             className="flex items-center gap-2"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back
+            Kembali
           </Button>
-          <h1 className="text-2xl font-semibold">Vehicle Details</h1>
+          <h1 className="text-2xl font-semibold">Detail Kendaraan</h1>
           <Badge
             className={
               vehicle.status === "Available"
@@ -81,11 +81,11 @@ export default function KegiatanDetails() {
           <Card>
             <CardContent className="p-6 grid grid-cols-2 gap-x-6 gap-y-4">
               <h2 className="col-span-2 text-lg font-semibold mb-4 flex items-center gap-2">
-                Vehicle Information
+                Informasi Kendaraan
               </h2>
 
               <div>
-                <p className="text-sm text-gray-500">Plate Number</p>
+                <p className="text-sm text-gray-500">Nomor Polisi</p>
                 <p className="font-medium">{vehicle.plate}</p>
               </div>
               <div>
@@ -101,15 +101,15 @@ export default function KegiatanDetails() {
                 <p className="font-medium">Camry</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Year</p>
+                <p className="text-sm text-gray-500">Tahun</p>
                 <p className="font-medium">{vehicle.year}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Type</p>
+                <p className="text-sm text-gray-500">Jenis Kendaraan</p>
                 <p className="font-medium">Car</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Fuel Type</p>
+                <p className="text-sm text-gray-500">Jenis Bahan Bakar</p>
                 <p className="font-medium">{vehicle.fuel}</p>
               </div>
               <div>
@@ -118,7 +118,7 @@ export default function KegiatanDetails() {
               </div>
 
               <div>
-                <p className="text-sm text-gray-500">Condition</p>
+                <p className="text-sm text-gray-500">Kondisi</p>
                 <Badge
                   className={
                     vehicle.condition === "Good"
@@ -149,13 +149,13 @@ export default function KegiatanDetails() {
               </div>
 
               <div className="col-span-2">
-                <p className="text-sm text-gray-500">Owning Unit</p>
-                <p className="font-medium">General Affairs Division</p>
+                <p className="text-sm text-gray-500">Unit Pemilik</p>
+                <p className="font-medium">Divisi Umum</p>
               </div>
               <div className="col-span-2">
-                <p className="text-sm text-gray-500">Notes</p>
+                <p className="text-sm text-gray-500">Catatan</p>
                 <p className="font-medium">
-                  Regular maintenance scheduled monthly
+                  Perawatan rutin dijadwalkan setiap bulan
                 </p>
               </div>
             </CardContent>
@@ -164,27 +164,31 @@ export default function KegiatanDetails() {
           {/* Compliance Card */}
           <Card>
             <CardContent className="p-6 space-y-6">
-              <h2 className="text-lg font-semibold">Compliance</h2>
+              <h2 className="text-lg font-semibold">Kepatuhan</h2>
 
               <div className="flex justify-between items-center border rounded-lg p-3 ">
                 <div>
-                  <p className="text-sm text-gray-500">STNK Number</p>
+                  <p className="text-sm text-gray-500">Nomor STNK</p>
                   <p className="font-medium">STNKO01</p>
-                  <p className="text-sm text-gray-500">Expires: 15/06/2025</p>
+                  <p className="text-sm text-gray-500">
+                    Berlaku hingga: 15/06/2025
+                  </p>
                 </div>
                 <Badge className="bg-red-100 text-red-600 rounded-md">
-                  Expired
+                  Kedaluwarsa
                 </Badge>
               </div>
 
               <div className="flex justify-between items-center border rounded-lg p-3">
                 <div>
-                  <p className="text-sm text-gray-500">Insurance Policy No</p>
+                  <p className="text-sm text-gray-500">Nomor Polis Asuransi</p>
                   <p className="font-medium">INS001</p>
-                  <p className="text-sm text-gray-500">Expires: 20/03/2025</p>
+                  <p className="text-sm text-gray-500">
+                    Berlaku hingga: 20/03/2025
+                  </p>
                 </div>
                 <Badge className="bg-red-100 text-red-600 rounded-md">
-                  Expired
+                  Kedaluwarsa
                 </Badge>
               </div>
             </CardContent>
@@ -195,17 +199,19 @@ export default function KegiatanDetails() {
         <div className="flex flex-col gap-6">
           <Card>
             <CardContent className="p-6 space-y-4">
-              <h2 className="text-lg font-semibold">Service & Maintenance</h2>
+              <h2 className="text-lg font-semibold">Servis & Perbaikan</h2>
               <div>
-                <p className="text-sm text-gray-500">Last Service Date</p>
+                <p className="text-sm text-gray-500">Tanggal Servis Terakhir</p>
                 <p className="font-medium">15/02/2024</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Next Service Due Date</p>
+                <p className="text-sm text-gray-500">
+                  Tanggal Servis Berikutnya
+                </p>
                 <p className="font-medium">15/08/2024</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Next Service Due (km)</p>
+                <p className="text-sm text-gray-500">Servis Berikutnya (km)</p>
                 <p className="font-medium">55.000</p>
               </div>
             </CardContent>
@@ -215,14 +221,14 @@ export default function KegiatanDetails() {
             <CardContent className="p-6 space-y-3">
               <h2 className="text-lg font-semibold">Audit</h2>
               <div>
-                <p className="text-sm text-gray-500">Created</p>
+                <p className="text-sm text-gray-500">Dibuat</p>
                 <p className="text-sm">2024-01-10 09:30:00</p>
-                <p className="text-xs text-gray-500">by Admin User</p>
+                <p className="text-xs text-gray-500">oleh Admin User</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Last Updated</p>
+                <p className="text-sm text-gray-500">Terakhir Diperbarui</p>
                 <p className="text-sm">2024-03-15 14:22:00</p>
-                <p className="text-xs text-gray-500">by Fleet Manager</p>
+                <p className="text-xs text-gray-500">oleh Manajer Armada</p>
               </div>
             </CardContent>
           </Card>

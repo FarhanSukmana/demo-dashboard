@@ -94,7 +94,7 @@ export default function RoomDetails() {
   return (
     <div className="space-y-6 pb-10">
       {/* Button Back */}
-      <div className="flex gap-x-4">
+      <div className="flex gap-x-4 items-center">
         <Button
           variant="ghost"
           className="flex items-center gap-2"
@@ -113,7 +113,7 @@ export default function RoomDetails() {
           <div className="flex w-full h-full gap-4 mb-4 md:flex-row flex-col">
             <div className="flex flex-col w-full gap-2">
               <label className="text-sm text-[#969696]">Kode *</label>
-              <Input value={room.code} disabled/>
+              <Input value={room.code} disabled />
               <label className="text-[10px] text-[#969696]">
                 Format: RN-YYYY-NNN
               </label>
@@ -160,7 +160,10 @@ export default function RoomDetails() {
           <div className="flex w-full h-full gap-4 mb-4 md:flex-row flex-col">
             <div className="flex flex-col w-full gap-2">
               <label className="text-sm text-[#969696]">Gedung *</label>
-              <Input value={building} onChange={(e)=>setBuilding(e.target.value)} />
+              <Input
+                value={building}
+                onChange={(e) => setBuilding(e.target.value)}
+              />
             </div>
             <div className="flex flex-col w-full gap-2">
               <label className="text-sm text-gray-700 dark:text-gray-300">
@@ -190,7 +193,7 @@ export default function RoomDetails() {
           {/* Available facilities */}
           <div>
             <p className="text-sm text-gray-500 mb-2">
-              Select available facilities for this room:
+              Pilih fasilitas yang tersedia untuk ruangan ini:
             </p>
             <div className="flex flex-wrap gap-2">
               {ALL_FACILITIES.map((facility) => {
@@ -246,7 +249,7 @@ export default function RoomDetails() {
           Cancel
         </Button>
         <Button type="submit" className="bg-green-500 hover:bg-green-600">
-          save
+          Simpan Perubahan
         </Button>
       </div>
     </div>

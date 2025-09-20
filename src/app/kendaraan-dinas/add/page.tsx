@@ -38,10 +38,8 @@ export default function AddKendaraanDinasPage() {
     Date | undefined
   >(undefined);
 
-
-
   // Add Data
-  const [plate, setPlate] = useState("")
+  const [plate, setPlate] = useState("");
   const [brand, setBrand] = useState("");
   const [year, setYear] = useState("");
   const [fuel, setFuel] = useState("");
@@ -49,36 +47,36 @@ export default function AddKendaraanDinasPage() {
   const [condition, setCondition] = useState("");
   const [status, setStatus] = useState("");
 
-  const handleSave = () =>{
-    const newVehicle={
+  const handleSave = () => {
+    const newVehicle = {
       plate,
       brand,
       year,
       fuel,
       odometer,
       condition,
-      status
-    }
+      status,
+    };
     router.push(
       `/kendaraan-dinas?newVehicle=${encodeURIComponent(
         JSON.stringify(newVehicle)
       )}`
     );
-  }
+  };
 
   return (
     <div className="space-y-6 pb-10">
       {/* Button Back */}
-      <div className="flex gap-x-4">
+      <div className="flex gap-x-4 items-center">
         <Button
           variant="ghost"
           className="flex items-center gap-2"
           onClick={() => router.back()}
         >
           <ArrowLeft className="h-4 w-4" />
-          Back
+          Kembali
         </Button>
-        <h1 className="text-xl font-semibold">Add Kendaraan Dinas</h1>
+        <h1 className="text-xl font-semibold">Tambah Kendaraan Dinas</h1>
       </div>
       {/* Card identification */}
       <Card className="rounded-md p-4">
@@ -87,7 +85,7 @@ export default function AddKendaraanDinasPage() {
           {/* Plate & VIN */}
           <div className="flex w-full h-full gap-4 mb-4 md:flex-row flex-col">
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Plate Number *</label>
+              <label className="text-sm text-[#969696]">Nomor Polisi *</label>
               <Input
                 placeholder="B 1234 XYZ"
                 onChange={(e) => setPlate(e.target.value)}
@@ -97,9 +95,7 @@ export default function AddKendaraanDinasPage() {
               </label>
             </div>
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-gray-700 dark:text-gray-300">
-                VIN
-              </label>
+              <label className="text-sm text-[#969696]">VIN</label>
               <Input placeholder="1HGBH41JXMN109186" />
             </div>
           </div>
@@ -117,20 +113,17 @@ export default function AddKendaraanDinasPage() {
               <Input placeholder="Camry" />
             </div>
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-gray-700 dark:text-gray-300">
-                Type
-              </label>
+              <label className="text-sm text-[#969696]">Jenis Kendaraan</label>
               <Select defaultValue="car">
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select Type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="car">Car</SelectItem>
+                  <SelectItem value="car">Mobil</SelectItem>
                   <SelectItem value="pickup">Pickup</SelectItem>
                   <SelectItem value="truck">Truck</SelectItem>
-                  <SelectItem value="bus">Bus</SelectItem>
-                  <SelectItem value="motorcycle">Motorcycle</SelectItem>
-                  <SelectItem value="utility">Utility</SelectItem>
+                  <SelectItem value="bus">Bis</SelectItem>
+                  <SelectItem value="motorcycle">Motor</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -138,7 +131,7 @@ export default function AddKendaraanDinasPage() {
           {/* Year, Fuel, Owning Unit */}
           <div className="flex w-full h-full gap-4 mb-4 md:flex-row flex-col">
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Year *</label>
+              <label className="text-sm text-[#969696]">Tahun *</label>
               <Input
                 type="number"
                 placeholder="2020"
@@ -146,13 +139,15 @@ export default function AddKendaraanDinasPage() {
               />
             </div>
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Fuel Type *</label>
+              <label className="text-sm text-[#969696]">
+                Jenis Bahan Bakar *
+              </label>
               <Select onValueChange={setFuel}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select Type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="gasoline">Gasoline</SelectItem>
+                  <SelectItem value="gasoline">Bensin</SelectItem>
                   <SelectItem value="diesel">Diesel</SelectItem>
                   <SelectItem value="electric">Electric</SelectItem>
                   <SelectItem value="hybrid">Hybrid</SelectItem>
@@ -160,10 +155,8 @@ export default function AddKendaraanDinasPage() {
               </Select>
             </div>
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-gray-700 dark:text-gray-300">
-                Owning Unit
-              </label>
-              <Input placeholder="General Affairs Division" />
+              <label className="text-sm text-[#969696]">Unit Pemilik</label>
+              <Input placeholder="Divisi Umum" />
             </div>
           </div>
         </CardContent>
@@ -171,20 +164,22 @@ export default function AddKendaraanDinasPage() {
 
       {/* Status & Condition */}
       <Card className="rounded-md p-4">
-        <CardTitle>Status & Condition</CardTitle>
+        <CardTitle>Status & Kondisi</CardTitle>
         <CardContent className="flex flex-col w-full h-full p-0 gap-y-4">
           <div className="flex w-full h-full gap-4">
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Condition *</label>
+              <label className="text-sm text-[#969696]">Kondisi *</label>
               <Select onValueChange={setCondition}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select Condition" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="good">Good</SelectItem>
-                  <SelectItem value="fair">Fair</SelectItem>
-                  <SelectItem value="need-repair">Needs Repair</SelectItem>
-                  <SelectItem value="unroadworthy">Unroadworthy</SelectItem>
+                  <SelectItem value="good">Baik</SelectItem>
+                  <SelectItem value="fair">Cukup</SelectItem>
+                  <SelectItem value="need-repair">Butuh Perbaikan</SelectItem>
+                  <SelectItem value="unroadworthy">
+                    Tidak Layak Jalan
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -195,10 +190,10 @@ export default function AddKendaraanDinasPage() {
                   <SelectValue placeholder="Select Type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="available">Available</SelectItem>
-                  <SelectItem value="inuse">In Use</SelectItem>
-                  <SelectItem value="maintenance">Maintenance</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
+                  <SelectItem value="available">Tersedia</SelectItem>
+                  <SelectItem value="inuse">Sedang digunakan</SelectItem>
+                  <SelectItem value="maintenance">Dalam Perawatan</SelectItem>
+                  <SelectItem value="inactive">Tidak Aktif</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -225,7 +220,7 @@ export default function AddKendaraanDinasPage() {
             {/* Last Service Date */}
             <div className="flex flex-col w-full gap-2">
               <label htmlFor="lastService" className="text-sm text-[#969696]">
-                Last Service Date
+                Tanggal Terakhir Service
               </label>
               <Popover open={openLast} onOpenChange={setOpenLast}>
                 <PopoverTrigger asChild>
@@ -236,7 +231,7 @@ export default function AddKendaraanDinasPage() {
                   >
                     {lastServiceDate
                       ? lastServiceDate.toLocaleDateString()
-                      : "Select date"}
+                      : "Pilih Tanggal"}
                     <ChevronDownIcon className="ml-2 h-4 w-4 opacity-50" />
                   </Button>
                 </PopoverTrigger>
@@ -260,7 +255,7 @@ export default function AddKendaraanDinasPage() {
             {/* Next Service Date */}
             <div className="flex flex-col w-full gap-2">
               <label htmlFor="nextService" className="text-sm text-[#969696]">
-                Next Service Date
+                Tanggal Service Berikutnya
               </label>
               <Popover open={openNext} onOpenChange={setOpenNext}>
                 <PopoverTrigger asChild>
@@ -271,7 +266,7 @@ export default function AddKendaraanDinasPage() {
                   >
                     {nextServiceDate
                       ? nextServiceDate.toLocaleDateString()
-                      : "Select date"}
+                      : "Pilih Tanggal"}
                     <ChevronDownIcon className="ml-2 h-4 w-4 opacity-50" />
                   </Button>
                 </PopoverTrigger>
@@ -294,8 +289,8 @@ export default function AddKendaraanDinasPage() {
 
             {/* Next Service Due */}
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-gray-700 dark:text-gray-300">
-                Next Service Due
+              <label className="text-sm text-[#969696]">
+                Service Berikutnya pada
               </label>
               <Input type="number" placeholder="55000" />
             </div>
@@ -305,27 +300,29 @@ export default function AddKendaraanDinasPage() {
 
       {/* Card Utilities & Documents */}
       <Card className="rounded-md p-4">
-        <CardTitle>Utilities & Documents (Optional)</CardTitle>
+        <CardTitle>Utilitas & Dokumen (Optional)</CardTitle>
         <CardContent className="flex flex-col w-full h-full p-0 gap-y-4">
           <div className="flex w-full gap-4">
             <div className="flex flex-col w-full gap-2">
               <label className="text-sm text-[#969696]">
-                Electric Meter No
+                Nomor Meteran Listrik
               </label>
               <Input placeholder="ELC2025001" />
             </div>
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Water Meter No</label>
+              <label className="text-sm text-[#969696]">
+                Nomor Meteran Air
+              </label>
               <Input placeholder="WTR2025001" />
             </div>
           </div>
           <div className="flex w-full gap-4">
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Asset Number</label>
+              <label className="text-sm text-[#969696]">Nomor Aset</label>
               <Input placeholder="AST2025001" />
             </div>
             <div className="flex flex-col w-full  gap-2">
-              <label className="text-sm text-[#969696]">Certificate No</label>
+              <label className="text-sm text-[#969696]">Nomor Sertifikat</label>
               <Input placeholder="CERT2025001" />
             </div>
           </div>
@@ -334,14 +331,14 @@ export default function AddKendaraanDinasPage() {
 
       {/* Card Notes */}
       <Card className="rounded-md p-4">
-        <CardTitle>Telemetry & Notes </CardTitle>
+        <CardTitle>Telemetri & Catatan</CardTitle>
         <CardContent className="flex flex-col w-full h-full p-0 gap-y-4">
           <div className="flex flex-col w-full  gap-2">
-            <label className="text-sm text-[#969696]">GPS Device ID</label>
+            <label className="text-sm text-[#969696]">ID Perangkat GPS</label>
             <Input placeholder="GPS001" />
           </div>
           <div className="flex flex-col w-full  gap-2">
-            <label className="text-sm text-[#969696]">Notes</label>
+            <label className="text-sm text-[#969696]">Catatan</label>
             <Textarea
               placeholder="Additional notes about the Vehicle"
               value={notes}
@@ -349,7 +346,7 @@ export default function AddKendaraanDinasPage() {
             />
           </div>
           <span className="text-[10px] text-[#969696]">
-            {notes.length}/1000 characters
+            {notes.length}/1000 Karakter
           </span>
         </CardContent>
       </Card>

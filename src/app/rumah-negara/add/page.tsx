@@ -47,14 +47,14 @@ export default function AddRumahNegaraPage() {
   return (
     <div className="space-y-6 pb-10">
       {/* Button Back */}
-      <div className="flex gap-x-4">
+      <div className="flex gap-x-4 items-center">
         <Button
           variant="ghost"
           className="flex items-center gap-2"
           onClick={() => router.back()}
         >
           <ArrowLeft className="h-4 w-4" />
-          Back
+          Kembali
         </Button>
         <h1 className="text-xl font-semibold">Tambah Rumah</h1>
       </div>
@@ -80,16 +80,16 @@ export default function AddRumahNegaraPage() {
               </label>
               <Select onValueChange={(value) => setType(value)}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select House Type" />
+                  <SelectValue placeholder="Pilih Tipe Rumah" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="official-residence">
-                    Official Residence
+                    Rumah Dinas
                   </SelectItem>
-                  <SelectItem value="staff-housing">Staff Housing</SelectItem>
-                  <SelectItem value="guest-house">Guest House</SelectItem>
-                  <SelectItem value="dormitory">Dormitory</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
+                  <SelectItem value="staff-housing">Perumahan Staf</SelectItem>
+                  <SelectItem value="guest-house">Rumah Tamu</SelectItem>
+                  <SelectItem value="dormitory">Asrama</SelectItem>
+                  <SelectItem value="other">Lainnya</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -98,7 +98,7 @@ export default function AddRumahNegaraPage() {
           <div className="flex flex-col w-full gap-2">
             <label className="text-sm text-[#969696]">Nama Rumah*</label>
             <Input
-              placeholder="Minister Official Residence"
+              placeholder="Rumah Dinas Menteri"
               onChange={(e) => setName(e.target.value)}
             />
           </div>
@@ -111,7 +111,7 @@ export default function AddRumahNegaraPage() {
           <div className="flex flex-col w-full gap-2">
             <label className="text-sm text-[#969696]">Alamat Jalan *</label>
             <Textarea
-              placeholder="Complete street Address"
+              placeholder="Lengkapi Alamat Jalan"
               onChange={(e) => setAddress(e.target.value)}
             />
           </div>
@@ -121,7 +121,7 @@ export default function AddRumahNegaraPage() {
               <Input placeholder="Jakarta Selatan" />
             </div>
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Province *</label>
+              <label className="text-sm text-[#969696]">Provinsi *</label>
               <Select onValueChange={(value) => setProvince(value)}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select Province" />
@@ -141,7 +141,7 @@ export default function AddRumahNegaraPage() {
               </Select>
             </div>
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Postal Code*</label>
+              <label className="text-sm text-[#969696]">Kode Pos*</label>
               <Input placeholder="12940" />
             </div>
           </div>
@@ -149,27 +149,27 @@ export default function AddRumahNegaraPage() {
       </Card>
       {/* Card Location */}
       <Card className="rounded-md p-4">
-        <CardTitle>Location (Optional)</CardTitle>
+        <CardTitle>Lokasi (Optional)</CardTitle>
         <CardContent className="flex flex-col w-full h-full p-0 gap-y-4">
           <div className="flex w-full h-full gap-4">
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Latitude</label>
+              <label className="text-sm text-[#969696]">Lintang</label>
               <Input type="number" placeholder="-6.2088" />
             </div>
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Longitude</label>
+              <label className="text-sm text-[#969696]">Garis Bujur</label>
               <Input type="number" placeholder="106.8456" />
             </div>
           </div>
           <span className="text-[10px] text-[#969696]">
-            Both coordinates required if any provided
+            Kedua koordinat diperlukan jika ada yang disediakan
           </span>
         </CardContent>
       </Card>
 
       {/* Card Physical */}
       <Card className="rounded-md p-4">
-        <CardTitle>Physical</CardTitle>
+        <CardTitle>Fisik</CardTitle>
         <CardContent className="flex flex-col w-full h-full p-0 gap-y-4">
           <div className="flex w-full h-full gap-4 flex-wrap">
             <div className="flex flex-col w-full md:w-1/6 gap-2">
@@ -210,10 +210,10 @@ export default function AddRumahNegaraPage() {
                   <SelectValue placeholder="Select Condition" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="good">Good</SelectItem>
-                  <SelectItem value="fair">Fair</SelectItem>
-                  <SelectItem value="need-repair">Need Repair</SelectItem>
-                  <SelectItem value="uninhabitable">Uninhabitable</SelectItem>
+                  <SelectItem value="good">Baik</SelectItem>
+                  <SelectItem value="fair">Cukup</SelectItem>
+                  <SelectItem value="need-repair">Butuh Perbaikan</SelectItem>
+                  <SelectItem value="uninhabitable">Tidak Layak Huni</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -224,9 +224,9 @@ export default function AddRumahNegaraPage() {
                   <SelectValue placeholder="Select Status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="available">Available</SelectItem>
-                  <SelectItem value="occupied">Occupied</SelectItem>
-                  <SelectItem value="maintenance">Maintenance</SelectItem>
+                  <SelectItem value="available">Tersedia</SelectItem>
+                  <SelectItem value="occupied">Terisi</SelectItem>
+                  <SelectItem value="maintenance">Dalam Perawatan</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -241,22 +241,22 @@ export default function AddRumahNegaraPage() {
           <div className="flex w-full gap-4">
             <div className="flex flex-col w-full gap-2">
               <label className="text-sm text-[#969696]">
-                Electric Meter No
+                Nomor Meteran Listrik
               </label>
               <Input placeholder="ELC2025001" />
             </div>
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Water Meter No</label>
+              <label className="text-sm text-[#969696]">Nomor Meteran Air</label>
               <Input placeholder="WTR2025001" />
             </div>
           </div>
           <div className="flex w-full gap-4">
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Asset Number</label>
+              <label className="text-sm text-[#969696]">Nomor Aset</label>
               <Input placeholder="AST2025001" />
             </div>
             <div className="flex flex-col w-full  gap-2">
-              <label className="text-sm text-[#969696]">Certificate No</label>
+              <label className="text-sm text-[#969696]">Nomor Sertifikat</label>
               <Input placeholder="CERT2025001" />
             </div>
           </div>
@@ -268,12 +268,12 @@ export default function AddRumahNegaraPage() {
         <CardTitle>Catatan (Optional)</CardTitle>
         <CardContent className="flex flex-col w-full h-full p-0 gap-y-2">
           <Textarea
-            placeholder="Additional notes about the property"
+            placeholder="Catatan tambahan mengenai Properti"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
           />
           <span className="text-[10px] text-[#969696]">
-            {notes.length}/1000 characters
+            {notes.length}/1000 karakter
           </span>
         </CardContent>
       </Card>

@@ -32,7 +32,7 @@ const Navbar: React.FC = () => {
   const pathname = usePathname();
 
   const getTitle = (): string => {
-    if (pathname === "/") return "Dashboard";
+    if (pathname === "/") return "Beranda";
 
     // Ambil segmen pertama setelah /
     const segment = pathname?.split("/")[1] ?? "";
@@ -42,7 +42,7 @@ const Navbar: React.FC = () => {
     };
 
     if (specialCases[segment]) return specialCases[segment];
-    if (!segment) return "Dashboard";
+    if (!segment) return "Beranda";
 
     // Ubah "rumah-negara" -> "Rumah Negara"
     return segment

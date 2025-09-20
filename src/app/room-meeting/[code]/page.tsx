@@ -70,7 +70,7 @@ export default function RoomDetails() {
           </Badge>
         </div>
         <Button variant="outline" className="flex items-center gap-2">
-          Open Calendar
+          Buka Calendar
         </Button>
       </div>
 
@@ -135,7 +135,7 @@ export default function RoomDetails() {
                 <Badge variant="outline">Projector</Badge>
                 <Badge variant="outline">Video Conference</Badge>
                 <Badge variant="outline">AC</Badge>
-                <Badge variant="outline">Whiteboard</Badge>
+                <Badge variant="outline">Papan Tulis</Badge>
               </div>
             </div>
 
@@ -158,7 +158,7 @@ export default function RoomDetails() {
               </div>
               <div className="mt-3">
                 <p className="text-sm text-gray-500">Alamat</p>
-                <p className="font-medium">Executive floor, west wing</p>
+                <p className="font-medium">Lantai Ekslusif</p>
               </div>
             </div>
 
@@ -166,7 +166,7 @@ export default function RoomDetails() {
             <div>
               <p className="text-sm text-gray-500">Catatan</p>
               <p className="font-medium">
-                Premium meeting room for executive discussions
+                Ruang pertemuan premium untuk diskusi eksekutif
               </p>
             </div>
           </CardContent>
@@ -177,14 +177,14 @@ export default function RoomDetails() {
           <CardContent className="p-6 space-y-4">
             <h2 className="text-lg font-semibold">Audit</h2>
             <div>
-              <p className="text-sm text-gray-500">Created</p>
+              <p className="text-sm text-gray-500">Dibuat pada:</p>
               <p className="font-medium">2024-01-10 09:30:00</p>
-              <p className="text-xs text-gray-500">by Admin User</p>
+              <p className="text-xs text-gray-500">oleh Admin User</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Last Updated</p>
+              <p className="text-sm text-gray-500">Terakhir Diubah:</p>
               <p className="font-medium">2024-03-15 14:22:00</p>
-              <p className="text-xs text-gray-500">by Room Manager</p>
+              <p className="text-xs text-gray-500">oleh Room Manager</p>
             </div>
           </CardContent>
         </Card>

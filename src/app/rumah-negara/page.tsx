@@ -117,7 +117,7 @@ export default function RumahNegaraPage() {
         {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-3 mb-4">
           <Input
-            placeholder="Search code/name/address"
+            placeholder="Cari Kode/Nama/Alamat"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="sm:max-w-xs"
@@ -127,7 +127,7 @@ export default function RumahNegaraPage() {
               <SelectValue placeholder="Province" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All</SelectItem>
+              <SelectItem value="all">Semua</SelectItem>
               <SelectItem value="DKI Jakarta">DKI Jakarta</SelectItem>
             </SelectContent>
           </Select>
@@ -136,10 +136,10 @@ export default function RumahNegaraPage() {
               <SelectValue placeholder="Condition" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value="Good">Good</SelectItem>
-              <SelectItem value="Fair">Fair</SelectItem>
-              <SelectItem value="Needs Repair">Needs Repair</SelectItem>
+              <SelectItem value="all">Semua</SelectItem>
+              <SelectItem value="Good">Baik</SelectItem>
+              <SelectItem value="Fair">Cukup</SelectItem>
+              <SelectItem value="Needs Repair">Butuh Perbaikan</SelectItem>
             </SelectContent>
           </Select>
           <Select onValueChange={setFilterStatus} value={filterStatus}>
@@ -147,10 +147,10 @@ export default function RumahNegaraPage() {
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value="Available">Available</SelectItem>
-              <SelectItem value="Occupied">Occupied</SelectItem>
-              <SelectItem value="Maintenance">Maintenance</SelectItem>
+              <SelectItem value="all">Semua</SelectItem>
+              <SelectItem value="Available">Tersedia</SelectItem>
+              <SelectItem value="Occupied">Terisi</SelectItem>
+              <SelectItem value="Maintenance">Dalam perawatan</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -199,7 +199,11 @@ export default function RumahNegaraPage() {
                           : "bg-yellow-500"
                       }
                     >
-                      {house.condition}
+                      {house.condition === "Good"
+                        ? "Baik"
+                        : house.condition === "Fair"
+                        ? "Cukup"
+                        : "Butuh Perbaikan"}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -212,7 +216,11 @@ export default function RumahNegaraPage() {
                           : "bg-yellow-500"
                       }
                     >
-                      {house.status}
+                      {house.status === "Available"
+                        ? "Tersedia"
+                        : house.status === "Occupied"
+                        ? "Terisi"
+                        : "Dalam Perawatan"}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
@@ -228,20 +236,20 @@ export default function RumahNegaraPage() {
                             router.push(`/rumah-negara/${house.code}`)
                           }
                         >
-                          View
+                          Lihat Detail
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() =>
                             router.push(`/rumah-negara/${house.code}/edit`)
                           }
                         >
-                          Edit
+                          Ubah
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="text-red-600"
                           onClick={() => handleDelete(house.code)}
                         >
-                          Delete
+                          Hapus
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

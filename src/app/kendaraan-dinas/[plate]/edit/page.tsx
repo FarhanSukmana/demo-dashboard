@@ -108,38 +108,32 @@ export default function EditKendaraanDinasPage() {
   return (
     <div className="space-y-6 pb-10">
       {/* Button Back */}
-      <div className="flex gap-x-4">
+      <div className="flex gap-x-4 items-center">
         <Button
           variant="ghost"
           className="flex items-center gap-2"
           onClick={() => router.back()}
         >
           <ArrowLeft className="h-4 w-4" />
-          Back
+          Kembali
         </Button>
-        <h1 className="text-xl font-semibold">Detail Kendaraan Dinas</h1>
+        <h1 className="text-xl font-semibold">Ubah Kendaraan Dinas</h1>
       </div>
       {/* Card identification */}
       <Card className="rounded-md p-4">
-        <CardTitle>Identification</CardTitle>
+        <CardTitle>Identifikasi</CardTitle>
         <CardContent className="flex flex-col w-full h-full p-0">
           {/* Plate & VIN */}
           <div className="flex w-full h-full gap-4 mb-4 md:flex-row flex-col">
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Plate Number *</label>
-              <Input
-                placeholder="B 1234 XYZ"
-                value={decodedPlate}
-                disabled
-              />
+              <label className="text-sm text-[#969696]">Nomor Polisi *</label>
+              <Input placeholder="B 1234 XYZ" value={decodedPlate} disabled />
               <label className="text-[10px] text-[#969696]">
                 Format: B 1234 XYZ
               </label>
             </div>
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-gray-700 dark:text-gray-300">
-                VIN
-              </label>
+              <label className="text-sm text-[#969696]">VIN</label>
               <Input placeholder="1HGBH41JXMN109186" />
             </div>
           </div>
@@ -159,7 +153,7 @@ export default function EditKendaraanDinasPage() {
             </div>
             <div className="flex flex-col w-full gap-2">
               <label className="text-sm text-gray-700 dark:text-gray-300">
-                Type
+                Jenis Kendaraan
               </label>
               <Select defaultValue="car">
                 <SelectTrigger className="w-full">
@@ -179,7 +173,7 @@ export default function EditKendaraanDinasPage() {
           {/* Year, Fuel, Owning Unit */}
           <div className="flex w-full h-full gap-4 mb-4 md:flex-row flex-col">
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Year *</label>
+              <label className="text-sm text-[#969696]">Tahun *</label>
               <Input
                 type="number"
                 value={year}
@@ -188,13 +182,15 @@ export default function EditKendaraanDinasPage() {
               />
             </div>
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Fuel Type *</label>
+              <label className="text-sm text-[#969696]">
+                Jenis Bahan Bakar *
+              </label>
               <Select value={fuel} onValueChange={setFuel}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select Type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="gasoline">Gasoline</SelectItem>
+                  <SelectItem value="gasoline">Bensin</SelectItem>
                   <SelectItem value="diesel">Diesel</SelectItem>
                   <SelectItem value="electric">Electric</SelectItem>
                   <SelectItem value="hybrid">Hybrid</SelectItem>
@@ -203,9 +199,9 @@ export default function EditKendaraanDinasPage() {
             </div>
             <div className="flex flex-col w-full gap-2">
               <label className="text-sm text-gray-700 dark:text-gray-300">
-                Owning Unit
+                Unit Pemilik
               </label>
-              <Input placeholder="General Affairs Division" />
+              <Input placeholder="Divisi Umum" />
             </div>
           </div>
         </CardContent>
@@ -213,20 +209,22 @@ export default function EditKendaraanDinasPage() {
 
       {/* Status & Condition */}
       <Card className="rounded-md p-4">
-        <CardTitle>Status & Condition</CardTitle>
+        <CardTitle>Status & Kondisi</CardTitle>
         <CardContent className="flex flex-col w-full h-full p-0 gap-y-4">
           <div className="flex w-full h-full gap-4">
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Condition *</label>
+              <label className="text-sm text-[#969696]">Kondisi *</label>
               <Select value={condition} onValueChange={setCondition}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select Condition" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Good">Good</SelectItem>
-                  <SelectItem value="Fair">Fair</SelectItem>
-                  <SelectItem value="Needs-Repair">Needs Repair</SelectItem>
-                  <SelectItem value="Unroadworthy">Unroadworthy</SelectItem>
+                  <SelectItem value="Good">Baik</SelectItem>
+                  <SelectItem value="Fair">Cukup</SelectItem>
+                  <SelectItem value="Needs-Repair">Butuh Perbaikan</SelectItem>
+                  <SelectItem value="Unroadworthy">
+                    Tidak Layak Jalan
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -237,10 +235,10 @@ export default function EditKendaraanDinasPage() {
                   <SelectValue placeholder="Select Type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Available">Available</SelectItem>
-                  <SelectItem value="Inuse">In Use</SelectItem>
-                  <SelectItem value="Maintenance">Maintenance</SelectItem>
-                  <SelectItem value="Inactive">Inactive</SelectItem>
+                  <SelectItem value="Available">Tersedia</SelectItem>
+                  <SelectItem value="Inuse">Sedang digunakan</SelectItem>
+                  <SelectItem value="Maintenance">Dalam Perawatan</SelectItem>
+                  <SelectItem value="Inactive">Tidak Aktif</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -267,7 +265,7 @@ export default function EditKendaraanDinasPage() {
             {/* Last Service Date */}
             <div className="flex flex-col w-full gap-2">
               <label htmlFor="lastService" className="text-sm text-[#969696]">
-                Last Service Date
+                Tanggal Terakhir Service
               </label>
               <Popover open={openLast} onOpenChange={setOpenLast}>
                 <PopoverTrigger asChild>
@@ -302,7 +300,7 @@ export default function EditKendaraanDinasPage() {
             {/* Next Service Date */}
             <div className="flex flex-col w-full gap-2">
               <label htmlFor="nextService" className="text-sm text-[#969696]">
-                Next Service Date
+                Tanggal Service Berikutnya
               </label>
               <Popover open={openNext} onOpenChange={setOpenNext}>
                 <PopoverTrigger asChild>
@@ -337,7 +335,7 @@ export default function EditKendaraanDinasPage() {
             {/* Next Service Due */}
             <div className="flex flex-col w-full gap-2">
               <label className="text-sm text-gray-700 dark:text-gray-300">
-                Next Service Due
+                Service Berikutnya pada
               </label>
               <Input type="number" placeholder="55000" />
             </div>
@@ -347,27 +345,29 @@ export default function EditKendaraanDinasPage() {
 
       {/* Card Utilities & Documents */}
       <Card className="rounded-md p-4">
-        <CardTitle>Utilities & Documents (Optional)</CardTitle>
+        <CardTitle>Utilitas & Dokumen (Optional)</CardTitle>
         <CardContent className="flex flex-col w-full h-full p-0 gap-y-4">
           <div className="flex w-full gap-4">
             <div className="flex flex-col w-full gap-2">
               <label className="text-sm text-[#969696]">
-                Electric Meter No
+                Nomor Meteran Listrik
               </label>
               <Input placeholder="ELC2025001" />
             </div>
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Water Meter No</label>
+              <label className="text-sm text-[#969696]">
+                Nomor Meteran Air
+              </label>
               <Input placeholder="WTR2025001" />
             </div>
           </div>
           <div className="flex w-full gap-4">
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Asset Number</label>
+              <label className="text-sm text-[#969696]">Nomor Aset</label>
               <Input placeholder="AST2025001" />
             </div>
             <div className="flex flex-col w-full  gap-2">
-              <label className="text-sm text-[#969696]">Certificate No</label>
+              <label className="text-sm text-[#969696]">Nomor Sertifikat</label>
               <Input placeholder="CERT2025001" />
             </div>
           </div>
@@ -376,14 +376,14 @@ export default function EditKendaraanDinasPage() {
 
       {/* Card Notes */}
       <Card className="rounded-md p-4">
-        <CardTitle>Telemetry & Notes </CardTitle>
+        <CardTitle>Telemetri & Catatan</CardTitle>
         <CardContent className="flex flex-col w-full h-full p-0 gap-y-4">
           <div className="flex flex-col w-full  gap-2">
-            <label className="text-sm text-[#969696]">GPS Device ID</label>
+            <label className="text-sm text-[#969696]">ID Perangkat GPS</label>
             <Input placeholder="GPS001" />
           </div>
           <div className="flex flex-col w-full  gap-2">
-            <label className="text-sm text-[#969696]">Notes</label>
+            <label className="text-sm text-[#969696]">Catatan</label>
             <Textarea
               placeholder="Additional notes about the Vehicle"
               value={notes}
@@ -391,7 +391,7 @@ export default function EditKendaraanDinasPage() {
             />
           </div>
           <span className="text-[10px] text-[#969696]">
-            {notes.length}/1000 characters
+            {notes.length}/1000 Karakter
           </span>
         </CardContent>
       </Card>

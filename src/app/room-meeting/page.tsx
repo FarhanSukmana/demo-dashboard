@@ -108,33 +108,33 @@ export default function RoomMeetingPage() {
             onChange={(e) => setSearch(e.target.value)}
             className="sm:max-w-xs"
           />
+          {/* Filter Type */}
           <Select onValueChange={setFilterType} value={filterType}>
             <SelectTrigger className="w-[150px]">
-              <SelectValue placeholder="Type" />
+              <SelectValue placeholder="Tipe" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value="Conference">Conference</SelectItem>
-              <SelectItem value="Boardroom">Boardroom</SelectItem>
-              <SelectItem value="Training">Training</SelectItem>
-              <SelectItem value="Collaboration">Collaboration</SelectItem>
+              <SelectItem value="all">Semua</SelectItem>
+              <SelectItem value="Offline">Offline</SelectItem>
+              <SelectItem value="Online">Online</SelectItem>
             </SelectContent>
           </Select>
+
+          {/* Filter Status */}
           <Select onValueChange={setFilterStatus} value={filterStatus}>
             <SelectTrigger className="w-[150px]">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value="Available">Available</SelectItem>
-              <SelectItem value="Occupied">Occupied</SelectItem>
-              <SelectItem value="Maintenance">Maintenance</SelectItem>
+              <SelectItem value="all">Semua</SelectItem>
+              <SelectItem value="Active">Aktif</SelectItem>
+              <SelectItem value="Inactive">Tidak Aktif</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <a href="room-meeting/add">
           <Button className="bg-green-600 hover:bg-green-700">
-            <Plus className="mr-2 h-4 w-4" /> Add Room
+            <Plus className="mr-2 h-4 w-4" /> Tambah Ruangan
           </Button>
         </a>
       </div>
@@ -204,14 +204,14 @@ export default function RoomMeetingPage() {
                             router.push(`/room-meeting/${room.code}`)
                           }
                         >
-                          View
+                          Lihat Detail
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() =>
                             router.push(`/room-meeting/${room.code}/edit`)
                           }
                         >
-                          Edit
+                          Ubah
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="text-red-600"

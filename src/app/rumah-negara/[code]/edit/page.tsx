@@ -98,7 +98,7 @@ export default function RumahNegaraDetails() {
   return (
     <div className="space-y-6 pb-10">
       {/* Back Button */}
-      <div className="flex gap-x-4">
+      <div className="flex gap-x-4 items-center">
         <Button
           variant="ghost"
           className="flex items-center gap-2"
@@ -127,10 +127,10 @@ export default function RumahNegaraDetails() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Official Residence">
-                    Official Residence
+                    Rumah Dinas
                   </SelectItem>
-                  <SelectItem value="Staff Housing">Staff Housing</SelectItem>
-                  <SelectItem value="Guest House">Guest House</SelectItem>
+                  <SelectItem value="Staff Housing">Perumahan Staf</SelectItem>
+                  <SelectItem value="Guest House">Rumah Tamu</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -173,7 +173,7 @@ export default function RumahNegaraDetails() {
               </Select>
             </div>
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Postal Code*</label>
+              <label className="text-sm text-[#969696]">Kode Pos*</label>
               <Input placeholder="12940" />
             </div>
           </div>
@@ -186,11 +186,11 @@ export default function RumahNegaraDetails() {
         <CardContent className="flex flex-col w-full h-full p-0 gap-y-4">
           <div className="flex w-full h-full gap-4">
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Latitude</label>
+              <label className="text-sm text-[#969696]">Lintang</label>
               <Input type="number" placeholder="-6.2088" />
             </div>
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Longitude</label>
+              <label className="text-sm text-[#969696]">Garis Bujur</label>
               <Input type="number" placeholder="106.8456" />
             </div>
           </div>
@@ -243,9 +243,9 @@ export default function RumahNegaraDetails() {
                   <SelectValue placeholder="Select Condition" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Good">Good</SelectItem>
-                  <SelectItem value="Fair">Fair</SelectItem>
-                  <SelectItem value="Needs Repair">Needs Repair</SelectItem>
+                  <SelectItem value="Good">Baik</SelectItem>
+                  <SelectItem value="Fair">Cukup</SelectItem>
+                  <SelectItem value="Needs Repair">Butuh Perbaikan</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -256,9 +256,9 @@ export default function RumahNegaraDetails() {
                   <SelectValue placeholder="Select Status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Available">Available</SelectItem>
-                  <SelectItem value="Occupied">Occupied</SelectItem>
-                  <SelectItem value="Maintenance">Maintenance</SelectItem>
+                  <SelectItem value="Available">Tersedia</SelectItem>
+                  <SelectItem value="Occupied">Terisi</SelectItem>
+                  <SelectItem value="Maintenance">Dalam Perawatan</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -272,22 +272,22 @@ export default function RumahNegaraDetails() {
           <div className="flex w-full gap-4">
             <div className="flex flex-col w-full gap-2">
               <label className="text-sm text-[#969696]">
-                Electric Meter No
+                Nomor Meteran Listrik
               </label>
               <Input placeholder="ELC2025001" />
             </div>
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Water Meter No</label>
+              <label className="text-sm text-[#969696]">Nomor Meteran Air</label>
               <Input placeholder="WTR2025001" />
             </div>
           </div>
           <div className="flex w-full gap-4">
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Asset Number</label>
+              <label className="text-sm text-[#969696]">Nomor Ase</label>
               <Input placeholder="AST2025001" />
             </div>
             <div className="flex flex-col w-full  gap-2">
-              <label className="text-sm text-[#969696]">Certificate No</label>
+              <label className="text-sm text-[#969696]">Nomor Serifikat</label>
               <Input placeholder="CERT2025001" />
             </div>
           </div>
