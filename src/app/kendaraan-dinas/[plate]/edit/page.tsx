@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -20,13 +20,37 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-
-import { useRouter } from "next/navigation";
-
+import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
-export default function AddKendaraanDinasPage() {
+const dummyVehicles = Array.from({ length: 20 }, (_, i) => ({
+  plate: `B ${1000 + i} ${["ABC", "DEF", "GHI", "JKL", "MNO"][i % 5]}`,
+  brand:
+    i < 5
+      ? `Toyota Fortuner ${i + 1}`
+      : i < 10
+      ? `Mitsubishi Pajero ${i + 1}`
+      : i < 15
+      ? `Honda CR-V ${i + 1}`
+      : `Suzuki Ertiga ${i + 1}`,
+  year: 2010 + (i % 15), // tahun 2010–2024
+  fuel: i % 2 === 0 ? "Gasoline" : "Diesel",
+  odometer: (i + 1) * 5000, // jarak tempuh naik tiap kendaraan
+  condition:
+    i % 4 === 0
+      ? "Good"
+      : i % 4 === 1
+      ? "Fair"
+      : i % 4 === 2
+      ? "Needs-Repair"
+      : "Good",
+  status: i % 3 === 0 ? "Available" : i % 3 === 1 ? "In Use" : "Maintenance",
+}));
+
+export default function EditKendaraanDinasPage() {
   const [notes, setNotes] = useState("");
+
+  const params = useParams();
   const router = useRouter();
   const [openLast, setOpenLast] = React.useState(false);
   const [lastServiceDate, setLastServiceDate] = React.useState<
@@ -38,10 +62,16 @@ export default function AddKendaraanDinasPage() {
     Date | undefined
   >(undefined);
 
+  const { plate } = useParams();
+  const [vehicle, setVehicle] = useState<any>(null);
+  const decodedPlate = decodeURIComponent(plate as string);
 
+  useEffect(() => {
+    const found = dummyVehicles.find((h) => h.plate === decodedPlate);
+    if (found) setVehicle(found);
+  }, [plate]);
 
   // Add Data
-  const [plate, setPlate] = useState("")
   const [brand, setBrand] = useState("");
   const [year, setYear] = useState("");
   const [fuel, setFuel] = useState("");
@@ -49,22 +79,31 @@ export default function AddKendaraanDinasPage() {
   const [condition, setCondition] = useState("");
   const [status, setStatus] = useState("");
 
-  const handleSave = () =>{
-    const newVehicle={
+  useEffect(() => {
+    if (vehicle) {
+      setBrand(vehicle.brand);
+      setYear(vehicle.year);
+      setFuel(vehicle.fuel);
+      setOdometer(vehicle.odometer);
+      setCondition(vehicle.condition);
+      setStatus(vehicle.status);
+    }
+  });
+
+  const handleSave = () => {
+    const newVehicle = {
       plate,
       brand,
       year,
       fuel,
       odometer,
       condition,
-      status
-    }
-    router.push(
-      `/kendaraan-dinas?newVehicle=${encodeURIComponent(
-        JSON.stringify(newVehicle)
-      )}`
-    );
-  }
+      status,
+    };
+    router.push(`/kendaraan-dinas`);
+  };
+
+  if (!vehicle) return <p className="p-4">Loading...</p>;
 
   return (
     <div className="space-y-6 pb-10">
@@ -78,7 +117,7 @@ export default function AddKendaraanDinasPage() {
           <ArrowLeft className="h-4 w-4" />
           Back
         </Button>
-        <h1 className="text-xl font-semibold">Add Kendaraan Dinas</h1>
+        <h1 className="text-xl font-semibold">Detail Kendaraan Dinas</h1>
       </div>
       {/* Card identification */}
       <Card className="rounded-md p-4">
@@ -90,7 +129,8 @@ export default function AddKendaraanDinasPage() {
               <label className="text-sm text-[#969696]">Plate Number *</label>
               <Input
                 placeholder="B 1234 XYZ"
-                onChange={(e) => setPlate(e.target.value)}
+                value={decodedPlate}
+                disabled
               />
               <label className="text-[10px] text-[#969696]">
                 Format: B 1234 XYZ
@@ -109,6 +149,7 @@ export default function AddKendaraanDinasPage() {
               <label className="text-sm text-[#969696]">Brand *</label>
               <Input
                 placeholder="Toyota"
+                value={brand}
                 onChange={(e) => setBrand(e.target.value)}
               />
             </div>
@@ -141,13 +182,14 @@ export default function AddKendaraanDinasPage() {
               <label className="text-sm text-[#969696]">Year *</label>
               <Input
                 type="number"
+                value={year}
                 placeholder="2020"
                 onChange={(e) => setYear(e.target.value)}
               />
             </div>
             <div className="flex flex-col w-full gap-2">
               <label className="text-sm text-[#969696]">Fuel Type *</label>
-              <Select onValueChange={setFuel}>
+              <Select value={fuel} onValueChange={setFuel}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select Type" />
                 </SelectTrigger>
@@ -176,29 +218,29 @@ export default function AddKendaraanDinasPage() {
           <div className="flex w-full h-full gap-4">
             <div className="flex flex-col w-full gap-2">
               <label className="text-sm text-[#969696]">Condition *</label>
-              <Select onValueChange={setCondition}>
+              <Select value={condition} onValueChange={setCondition}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select Condition" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="good">Good</SelectItem>
-                  <SelectItem value="fair">Fair</SelectItem>
-                  <SelectItem value="need-repair">Needs Repair</SelectItem>
-                  <SelectItem value="unroadworthy">Unroadworthy</SelectItem>
+                  <SelectItem value="Good">Good</SelectItem>
+                  <SelectItem value="Fair">Fair</SelectItem>
+                  <SelectItem value="Needs-Repair">Needs Repair</SelectItem>
+                  <SelectItem value="Unroadworthy">Unroadworthy</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="flex flex-col w-full gap-2">
               <label className="text-sm text-[#969696]">Status *</label>
-              <Select onValueChange={setStatus}>
+              <Select value={status} onValueChange={setStatus}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select Type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="available">Available</SelectItem>
-                  <SelectItem value="inuse">In Use</SelectItem>
-                  <SelectItem value="maintenance">Maintenance</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
+                  <SelectItem value="Available">Available</SelectItem>
+                  <SelectItem value="Inuse">In Use</SelectItem>
+                  <SelectItem value="Maintenance">Maintenance</SelectItem>
+                  <SelectItem value="Inactive">Inactive</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -215,7 +257,7 @@ export default function AddKendaraanDinasPage() {
             <label className="text-sm text-[#969696]">Odometer (km)*</label>
             <Input
               type="number"
-              placeholder="45000"
+              value={odometer}
               onChange={(e) => setOdometer(e.target.value)}
             />
           </div>

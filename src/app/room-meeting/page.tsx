@@ -1,6 +1,6 @@
 "use client";
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -26,52 +26,61 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { Plus, MoreVertical } from "lucide-react";
 
-// Dummy data untuk Room Meeting
-const dummyRooms = [
-  {
-    code: "RM-2025-001",
-    name: "Main Conference Hall",
-    type: "Conference",
-    capacity: 200,
-    location: "Building A - 2nd Floor",
-    status: "Available",
-  },
-  {
-    code: "RM-2025-002",
-    name: "Executive Meeting Room",
-    type: "Boardroom",
-    capacity: 20,
-    location: "Building B - 5th Floor",
-    status: "Occupied",
-  },
-  {
-    code: "RM-2025-003",
-    name: "Training Room Alpha",
-    type: "Training",
-    capacity: 50,
-    location: "Building C - Ground Floor",
-    status: "Maintenance",
-  },
-  {
-    code: "RM-2025-004",
-    name: "Project Collaboration Room",
-    type: "Collaboration",
-    capacity: 15,
-    location: "Building D - 3rd Floor",
-    status: "Available",
-  },
-];
+// Dummy data 20 rooms
+const dummyRooms = Array.from({ length: 20 }, (_, i) => ({
+  code: `RM-2025-${String(i + 1).padStart(3, "0")}`,
+  name:
+    i < 5
+      ? `Main Conference Hall ${i + 1}`
+      : i < 10
+      ? `Executive Meeting Room ${i + 1}`
+      : i < 15
+      ? `Training Room ${i + 1}`
+      : `Collaboration Room ${i + 1}`,
+  type: i % 2 === 0 ? "Offline" : "Online",
+  capacity: (i + 1) * 10,
+  location: `Building ${String.fromCharCode(65 + (i % 5))} - Floor ${i % 6}`,
+  status: i % 2 === 0 ? "Active" : "Inactive",
+}));
 
 export default function RoomMeetingPage() {
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
+  const [page, setPage] = useState(1);
+  const [rooms, setRooms] = useState(dummyRooms);
 
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const filteredData = dummyRooms.filter(
+  
+  const handleDelete = (code: any) => {
+    setRooms((prev) => prev.filter((room) => room.code !== code));
+  };
+
+  useEffect(() => {
+    const newRoomParam = searchParams.get("newRoom");
+    if (newRoomParam) {
+      try {
+        const newRoom = JSON.parse(decodeURIComponent(newRoomParam));
+        setRooms((prev) => [...prev, newRoom]);
+      } catch (e) {
+        console.error("Failed to parse newRoom:", e);
+      }
+    }
+  }, [searchParams]);
+
+  const filteredData = rooms.filter(
     (room) =>
       (search === "" ||
         room.code.toLowerCase().includes(search.toLowerCase()) ||
@@ -79,6 +88,13 @@ export default function RoomMeetingPage() {
         room.location.toLowerCase().includes(search.toLowerCase())) &&
       (filterType === "all" || room.type === filterType) &&
       (filterStatus === "all" || room.status === filterStatus)
+  );
+
+  const itemsPerPage = 15;
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const paginatedData = filteredData.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
   );
 
   return (
@@ -129,23 +145,35 @@ export default function RoomMeetingPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Code</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Capacity</TableHead>
-                <TableHead>Location/Meeting</TableHead>
+                <TableHead>Kode</TableHead>
+                <TableHead>Nama</TableHead>
+                <TableHead>Tipe</TableHead>
+                <TableHead>Kapasitas</TableHead>
+                <TableHead>Lokasi/Meeting</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead className="text-right">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredData.map((room) => (
+              {paginatedData.map((room) => (
                 <TableRow key={room.code}>
                   <TableCell className="font-semibold text-green-600">
                     {room.code}
                   </TableCell>
                   <TableCell>{room.name}</TableCell>
-                  <TableCell>{room.type}</TableCell>
+                  <TableCell>
+                    <Badge
+                      className={
+                        room.type === "Online"
+                          ? "bg-green-500"
+                          : room.status === "Offline"
+                          ? "bg-blue-500"
+                          : "bg-yellow-500"
+                      }
+                    >
+                      {room.type}
+                    </Badge>
+                  </TableCell>
                   <TableCell>{room.capacity}</TableCell>
                   <TableCell className="truncate max-w-[200px]">
                     {room.location}
@@ -153,9 +181,9 @@ export default function RoomMeetingPage() {
                   <TableCell>
                     <Badge
                       className={
-                        room.status === "Available"
+                        room.status === "Active"
                           ? "bg-green-500"
-                          : room.status === "Occupied"
+                          : room.status === "Inactive"
                           ? "bg-blue-500"
                           : "bg-yellow-500"
                       }
@@ -178,8 +206,17 @@ export default function RoomMeetingPage() {
                         >
                           View
                         </DropdownMenuItem>
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem className="text-red-600">
+                        <DropdownMenuItem
+                          onClick={() =>
+                            router.push(`/room-meeting/${room.code}/edit`)
+                          }
+                        >
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="text-red-600"
+                          onClick={() => handleDelete(room.code)}
+                        >
                           Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -189,6 +226,38 @@ export default function RoomMeetingPage() {
               ))}
             </TableBody>
           </Table>
+
+          {/* Pagination */}
+          <div className="mt-4 flex">
+            <Pagination className="flex w-full justify-end">
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    aria-disabled={page === 1}
+                    className="cursor-pointer"
+                  />
+                </PaginationItem>
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <PaginationItem key={i}>
+                    <PaginationLink
+                      isActive={page === i + 1}
+                      onClick={() => setPage(i + 1)}
+                    >
+                      {i + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                <PaginationItem>
+                  <PaginationNext
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    aria-disabled={page === totalPages}
+                    className="cursor-pointer"
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
         </CardContent>
       </Card>
     </div>

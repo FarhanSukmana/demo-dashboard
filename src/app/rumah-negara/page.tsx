@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -26,66 +27,74 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { Plus, MoreVertical } from "lucide-react";
 
-// Dummy data
-const dummyHouses = [
-  {
-    code: "RN-2025-001",
-    name: "Minister Official Residence",
-    address: "Jl. HR. Rasuna Said No. 1, Kuningan, Jakarta Selatan",
-    province: "DKI Jakarta",
-    type: "Official Residence",
-    condition: "Good",
-    status: "Available",
-  },
-  {
-    code: "RN-2025-002",
-    name: "Deputy Minister Residence",
-    address: "Jl. HR. Rasuna Said No. 2, Kuningan, Jakarta Selatan",
-    province: "DKI Jakarta",
-    type: "Official Residence",
-    condition: "Good",
-    status: "Occupied",
-  },
-  {
-    code: "RN-2025-003",
-    name: "Secretary General Residence",
-    address: "Jl. HR. Rasuna Said No. 3, Kuningan, Jakarta Selatan",
-    province: "DKI Jakarta",
-    type: "Official Residence",
-    condition: "Needs Repair",
-    status: "Maintenance",
-  },
-  {
-    code: "RN-2025-004",
-    name: "Staff Housing Block A",
-    address: "Jl. Kemang Raya No. 15, Jakarta Selatan",
-    province: "DKI Jakarta",
-    type: "Staff Housing",
-    condition: "Fair",
-    status: "Available",
-  },
-  {
-    code: "RN-2025-005",
-    name: "Guest House Central",
-    address: "Jl. Sudirman No. 88, Jakarta Pusat",
-    province: "DKI Jakarta",
-    type: "Guest House",
-    condition: "Good",
-    status: "Occupied",
-  },
-];
+// Dummy data 20 rumah
+const dummyHouses = Array.from({ length: 20 }, (_, i) => ({
+  code: `RN-2025-${String(i + 1).padStart(3, "0")}`,
+  name:
+    i < 5
+      ? `Minister Residence ${i + 1}`
+      : i < 10
+      ? `Deputy Residence ${i + 1}`
+      : i < 15
+      ? `Staff Housing Block ${i + 1}`
+      : `Guest House ${i + 1}`,
+  address: `Jl. Contoh No. ${i + 1}, Jakarta Selatan`,
+  province: "DKI Jakarta",
+  type:
+    i % 3 === 0
+      ? "Official Residence"
+      : i % 3 === 1
+      ? "Staff Housing"
+      : "Guest House",
+  condition:
+    i % 4 === 0
+      ? "Good"
+      : i % 4 === 1
+      ? "Fair"
+      : i % 4 === 2
+      ? "Needs Repair"
+      : "Good",
+  status: i % 3 === 0 ? "Available" : i % 3 === 1 ? "Occupied" : "Maintenance",
+  
+}));
 
 export default function RumahNegaraPage() {
   const [search, setSearch] = useState("");
   const [filterProvince, setFilterProvince] = useState("all");
   const [filterCondition, setFilterCondition] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
+  const [page, setPage] = useState(1);
+  const [houses, setHouses] = useState(dummyHouses); // mulai dari dummy
+  const searchParams = useSearchParams();
+
+  const handleDelete = (code:any) => {
+    setHouses((prev) => prev.filter((house) => house.code !== code));
+  };
 
   const router = useRouter();
+  React.useEffect(() => {
+    const newHouseParam = searchParams.get("newHouse");
+    if (newHouseParam) {
+      try {
+        const newHouse = JSON.parse(decodeURIComponent(newHouseParam));
+        setHouses((prev) => [...prev, newHouse]);
+      } catch (e) {
+        console.error("Failed to parse newHouse:", e);
+      }
+    }
+  }, [searchParams]);
 
-  const filteredData = dummyHouses.filter(
+  const filteredData = houses.filter(
     (house) =>
       (search === "" ||
         house.code.toLowerCase().includes(search.toLowerCase()) ||
@@ -94,6 +103,12 @@ export default function RumahNegaraPage() {
       (filterProvince === "all" || house.province === filterProvince) &&
       (filterCondition === "all" || house.condition === filterCondition) &&
       (filterStatus === "all" || house.status === filterStatus)
+  );
+  const itemsPerPage = 15;
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const paginatedData = filteredData.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
   );
 
   return (
@@ -141,7 +156,7 @@ export default function RumahNegaraPage() {
         </div>
         <a href="rumah-negara/add">
           <Button className="bg-green-600 hover:bg-green-700">
-            <Plus className="mr-2 h-4 w-4" /> Add House
+            <Plus className="mr-2 h-4 w-4" /> Tambah Rumah
           </Button>
         </a>
       </div>
@@ -152,18 +167,18 @@ export default function RumahNegaraPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Code</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Address</TableHead>
-                <TableHead>Province</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Condition</TableHead>
+                <TableHead>Kode</TableHead>
+                <TableHead>Nama</TableHead>
+                <TableHead>Alamat</TableHead>
+                <TableHead>Provinsi</TableHead>
+                <TableHead>Tipe</TableHead>
+                <TableHead>Kondisi</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead className="text-right">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredData.map((house) => (
+              {paginatedData.map((house) => (
                 <TableRow key={house.code}>
                   <TableCell className="font-semibold text-green-600">
                     {house.code}
@@ -215,8 +230,17 @@ export default function RumahNegaraPage() {
                         >
                           View
                         </DropdownMenuItem>
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem className="text-red-600">
+                        <DropdownMenuItem
+                          onClick={() =>
+                            router.push(`/rumah-negara/${house.code}/edit`)
+                          }
+                        >
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="text-red-600"
+                          onClick={() => handleDelete(house.code)}
+                        >
                           Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -226,6 +250,38 @@ export default function RumahNegaraPage() {
               ))}
             </TableBody>
           </Table>
+
+          {/* Pagination */}
+          <div className="mt-4 flex ">
+            <Pagination className="flex w-full justify-end">
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    aria-disabled={page === 1}
+                    className="cursor-pointer"
+                  />
+                </PaginationItem>
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <PaginationItem key={i}>
+                    <PaginationLink
+                      isActive={page === i + 1}
+                      onClick={() => setPage(i + 1)}
+                    >
+                      {i + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                <PaginationItem>
+                  <PaginationNext
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    aria-disabled={page === totalPages}
+                    className="cursor-pointer"
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -1,17 +1,48 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, FileText, Calendar, MapPin, Copy } from "lucide-react";
 
+// Dummy data 20 kendaraan dinas
+const dummyVehicles = Array.from({ length: 20 }, (_, i) => ({
+  plate: `B ${1000 + i} ${["ABC", "DEF", "GHI", "JKL", "MNO"][i % 5]}`,
+  brand:
+    i < 5
+      ? `Toyota Fortuner ${i + 1}`
+      : i < 10
+      ? `Mitsubishi Pajero ${i + 1}`
+      : i < 15
+      ? `Honda CR-V ${i + 1}`
+      : `Suzuki Ertiga ${i + 1}`,
+  year: 2010 + (i % 15), // tahun 2010–2024
+  fuel: i % 2 === 0 ? "Gasoline" : "Diesel",
+  odometer: (i + 1) * 5000, // jarak tempuh naik tiap kendaraan
+  condition:
+    i % 4 === 0
+      ? "Good"
+      : i % 4 === 1
+      ? "Fair"
+      : i % 4 === 2
+      ? "Needs Repair"
+      : "Good",
+  status: i % 3 === 0 ? "Available" : i % 3 === 1 ? "In Use" : "Maintenance",
+}));
 export default function KegiatanDetails() {
+  const { plate } = useParams();
   const router = useRouter();
 
+  const decodedPlate = decodeURIComponent(plate as string);
+  const vehicle = dummyVehicles.find((h) => h.plate === decodedPlate);
   const handleCopy = (text: any) => {
     navigator.clipboard.writeText(text);
     alert("Disalin: " + text);
   };
+
+  if (!vehicle) {
+    return <div className="p-6">Vehicle not found</div>;
+  }
 
   return (
     <div className="space-y-6 p-6">
@@ -27,8 +58,18 @@ export default function KegiatanDetails() {
             Back
           </Button>
           <h1 className="text-2xl font-semibold">Vehicle Details</h1>
-          <Badge className="bg-green-100 text-green-700 rounded-full">
-            Available
+          <Badge
+            className={
+              vehicle.status === "Available"
+                ? "bg-green-500"
+                : vehicle.status === "In Use"
+                ? "bg-blue-500"
+                : vehicle.status === "Inactive"
+                ? "bg-gray-500"
+                : "bg-yellow-500"
+            }
+          >
+            {vehicle.status}
           </Badge>
         </div>
       </div>
@@ -40,12 +81,12 @@ export default function KegiatanDetails() {
           <Card>
             <CardContent className="p-6 grid grid-cols-2 gap-x-6 gap-y-4">
               <h2 className="col-span-2 text-lg font-semibold mb-4 flex items-center gap-2">
-                🚗 Vehicle Information
+                Vehicle Information
               </h2>
 
               <div>
                 <p className="text-sm text-gray-500">Plate Number</p>
-                <p className="font-medium">B 1234 ABC</p>
+                <p className="font-medium">{vehicle.plate}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">VIN</p>
@@ -53,7 +94,7 @@ export default function KegiatanDetails() {
               </div>
               <div>
                 <p className="text-sm text-gray-500">Brand</p>
-                <p className="font-medium">Toyota</p>
+                <p className="font-medium">{vehicle.brand}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">Model</p>
@@ -61,7 +102,7 @@ export default function KegiatanDetails() {
               </div>
               <div>
                 <p className="text-sm text-gray-500">Year</p>
-                <p className="font-medium">2020</p>
+                <p className="font-medium">{vehicle.year}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">Type</p>
@@ -69,23 +110,41 @@ export default function KegiatanDetails() {
               </div>
               <div>
                 <p className="text-sm text-gray-500">Fuel Type</p>
-                <p className="font-medium">Gasoline</p>
+                <p className="font-medium">{vehicle.fuel}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">Odometer</p>
-                <p className="font-medium">45.000 km</p>
+                <p className="font-medium">{vehicle.odometer}</p>
               </div>
 
               <div>
                 <p className="text-sm text-gray-500">Condition</p>
-                <Badge className="bg-green-100 text-green-700 rounded-full">
-                  Good
+                <Badge
+                  className={
+                    vehicle.condition === "Good"
+                      ? "bg-green-500"
+                      : vehicle.condition === "Fair"
+                      ? "bg-blue-500"
+                      : "bg-yellow-500"
+                  }
+                >
+                  {vehicle.condition}
                 </Badge>
               </div>
               <div>
                 <p className="text-sm text-gray-500">Status</p>
-                <Badge className="bg-green-100 text-green-700 rounded-full">
-                  Available
+                <Badge
+                  className={
+                    vehicle.status === "Available"
+                      ? "bg-green-500"
+                      : vehicle.status === "In Use"
+                      ? "bg-blue-500"
+                      : vehicle.status === "Inactive"
+                      ? "bg-gray-500"
+                      : "bg-yellow-500"
+                  }
+                >
+                  {vehicle.status}
                 </Badge>
               </div>
 

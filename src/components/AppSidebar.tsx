@@ -16,7 +16,7 @@ import {
   LogOut,
   Building,
   Video,
-  Car
+  Car,
 } from "lucide-react";
 
 import {
@@ -42,7 +42,11 @@ import {
   DropdownMenu,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import { DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "./ui/dropdown-menu";
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 // import {
 //   Collapsible,
@@ -98,7 +102,7 @@ const expert = [
 ];
 
 const AppSidebar = () => (
-  <Sidebar collapsible="icon"  >
+  <Sidebar collapsible="icon">
     {/* Header */}
     <SidebarHeader className="py-4">
       <SidebarMenu>
@@ -122,7 +126,6 @@ const AppSidebar = () => (
     <SidebarContent>
       {/* GROUP APPLICATION */}
       <SidebarGroup>
-        <SidebarGroupLabel>Application</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
             {items.map((item) => (
@@ -226,17 +229,9 @@ const AppSidebar = () => (
             <DropdownMenuContent
               sideOffset={10}
               side="top"
-              align="start"
+              align="end"
               className=""
             >
-              <div className="flex items-center justify-center gap-4 p-2">
-                {/* <Avatar>
-                  <AvatarImage src="/assets/img/unnamed.png" alt="profile" />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar> */}
-                Siti Rahma
-              </div>
-              <DropdownMenuSeparator />
               <DropdownMenuItem variant="destructive">
                 <LogOut className="w-[1.2rem] h-[1.2rem] mr-2" />
                 Sign Out

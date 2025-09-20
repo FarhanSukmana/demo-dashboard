@@ -52,7 +52,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="flex justify-between w-full h-full p-4 bg-sidebar rounded-lg">
+    <nav className="flex justify-between w-full h-full p-4 bg-card rounded-lg border shadow-sm">
       <div className="flex gap-4">
         <SidebarTrigger />
         <h1 className="text-black dark:text-white font-semibold text-xl">
@@ -61,7 +61,6 @@ const Navbar: React.FC = () => {
       </div>
 
       <div className="flex items-center gap-4">
-
         {/* Notification */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -11,42 +12,92 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRouter } from "next/navigation";
-
 import { ArrowLeft } from "lucide-react";
 
-export default function AddRumahNegaraPage() {
-  const [notes, setNotes] = useState("");
+// Dummy data source (sama seperti di list)
+const dummyHouses = Array.from({ length: 20 }, (_, i) => ({
+  code: `RN-2025-${String(i + 1).padStart(3, "0")}`,
+  name:
+    i < 5
+      ? `Minister Residence ${i + 1}`
+      : i < 10
+      ? `Deputy Residence ${i + 1}`
+      : i < 15
+      ? `Staff Housing Block ${i + 1}`
+      : `Guest House ${i + 1}`,
+  address: `Jl. Contoh No. ${i + 1}, Jakarta Selatan`,
+  province: "DKI Jakarta",
+  type:
+    i % 3 === 0
+      ? "Official Residence"
+      : i % 3 === 1
+      ? "Staff Housing"
+      : "Guest House",
+  condition:
+    i % 4 === 0
+      ? "Good"
+      : i % 4 === 1
+      ? "Fair"
+      : i % 4 === 2
+      ? "Needs Repair"
+      : "Good",
+  status: i % 3 === 0 ? "Available" : i % 3 === 1 ? "Occupied" : "Maintenance",
+  notes: "Catatan opsional rumah " + (i + 1),
+}));
+
+export default function RumahNegaraDetails() {
+  const params = useParams();
   const router = useRouter();
-  const [code, setCode] = useState("");
+  const { code } = params;
+
+  const [house, setHouse] = useState<any>(null);
+
+  useEffect(() => {
+    // cari data sesuai code
+    const found = dummyHouses.find((h) => h.code === code);
+    if (found) setHouse(found);
+  }, [code]);
+
+  // state untuk edit form
   const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [province, setProvince] = useState("");
   const [type, setType] = useState("");
+  const [province, setProvince] = useState("");
+  const [address, setAddress] = useState("");
   const [condition, setCondition] = useState("");
   const [status, setStatus] = useState("");
-  
-  const handleSave = () => {
-    // kirim data lewat query param
-    const newHouse = {
-    code,
-    name,
-    address,
-    province,
-    type,
-    condition,
-    status,
-    };
+  const [notes, setNotes] = useState("");
 
-    // kirim data pakai JSON string
-    router.push(
-      `/rumah-negara?newHouse=${encodeURIComponent(JSON.stringify(newHouse))}`
-    );
+  useEffect(() => {
+    if (house) {
+      setName(house.name);
+      setType(house.type);
+      setProvince(house.province);
+      setAddress(house.address);
+      setCondition(house.condition);
+      setStatus(house.status);
+      setNotes(house.notes);
+    }
+  }, [house]);
+
+  const handleSave = () => {
+    console.log("Updated House:", {
+      code,
+      name,
+      type,
+      province,
+      address,
+      condition,
+      status,
+      notes,
+    });
+    router.push("/rumah-negara"); // kembali ke list
   };
+
+  if (!house) return <p className="p-4">Loading...</p>;
 
   return (
     <div className="space-y-6 pb-10">
-      {/* Button Back */}
+      {/* Back Button */}
       <div className="flex gap-x-4">
         <Button
           variant="ghost"
@@ -56,87 +107,68 @@ export default function AddRumahNegaraPage() {
           <ArrowLeft className="h-4 w-4" />
           Back
         </Button>
-        <h1 className="text-xl font-semibold">Tambah Rumah</h1>
+        <h1 className="text-xl font-semibold">Edit Rumah - {house.code}</h1>
       </div>
-      {/* Card identification */}
+
+      {/* Identification */}
       <Card className="rounded-md p-4">
         <CardTitle>Identifikasi</CardTitle>
         <CardContent className="flex flex-col w-full h-full p-0">
-          {/* code & house type */}
           <div className="flex w-full h-full gap-4 mb-4 md:flex-row flex-col">
             <div className="flex flex-col w-full gap-2">
               <label className="text-sm text-[#969696]">Kode *</label>
-              <Input
-                placeholder="RN-2025-001"
-                onChange={(e) => setCode(e.target.value)}
-              />
-              <label className="text-[10px] text-[#969696]">
-                Format: RN-YYYY-NNN
-              </label>
+              <Input value={house.code} disabled />
             </div>
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-gray-700 dark:text-gray-300">
-                Tipe Rumah
-              </label>
-              <Select onValueChange={(value) => setType(value)}>
+              <label className="text-sm text-gray-700">Tipe Rumah</label>
+              <Select value={type} onValueChange={setType}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select House Type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="official-residence">
+                  <SelectItem value="Official Residence">
                     Official Residence
                   </SelectItem>
-                  <SelectItem value="staff-housing">Staff Housing</SelectItem>
-                  <SelectItem value="guest-house">Guest House</SelectItem>
-                  <SelectItem value="dormitory">Dormitory</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
+                  <SelectItem value="Staff Housing">Staff Housing</SelectItem>
+                  <SelectItem value="Guest House">Guest House</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
-          {/* HouseName */}
           <div className="flex flex-col w-full gap-2">
-            <label className="text-sm text-[#969696]">Nama Rumah*</label>
-            <Input
-              placeholder="Minister Official Residence"
-              onChange={(e) => setName(e.target.value)}
-            />
+            <label className="text-sm text-[#969696]">Nama Rumah *</label>
+            <Input value={name} onChange={(e) => setName(e.target.value)} />
           </div>
         </CardContent>
       </Card>
-      {/* Card Address */}
+
+      {/* Address */}
       <Card className="rounded-md p-4">
         <CardTitle>Alamat</CardTitle>
-        <CardContent className="flex flex-col w-full h-full p-0 gap-y-4">
-          <div className="flex flex-col w-full gap-2">
+        <CardContent className="flex flex-col gap-y-4 w-full h-full p-0">
+          <div className="flex flex-col gap-2 w-full h-full">
             <label className="text-sm text-[#969696]">Alamat Jalan *</label>
             <Textarea
-              placeholder="Complete street Address"
+              value={address}
               onChange={(e) => setAddress(e.target.value)}
             />
           </div>
-          <div className="flex w-full h-full gap-4">
+          <div className="flex w-full gap-4">
             <div className="flex flex-col w-full gap-2">
               <label className="text-sm text-[#969696]">Kota *</label>
               <Input placeholder="Jakarta Selatan" />
             </div>
             <div className="flex flex-col w-full gap-2">
-              <label className="text-sm text-[#969696]">Province *</label>
-              <Select onValueChange={(value) => setProvince(value)}>
+              <label className="text-sm text-[#969696]">Provinsi *</label>
+              <Select value={province} onValueChange={setProvince}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select Province" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="official-residence">
-                    DKI Jakarta
-                  </SelectItem>
-                  <SelectItem value="staff-housing">Jawa Barat</SelectItem>
-                  <SelectItem value="guest-house">Jawa Tengah</SelectItem>
-                  <SelectItem value="dormitory">Jawa Timur</SelectItem>
-                  <SelectItem value="other">Bali</SelectItem>
-                  <SelectItem value="other">DI Yogyakarta</SelectItem>
-                  <SelectItem value="other">Sumatera Barat</SelectItem>
-                  <SelectItem value="other">Sumatera Utara</SelectItem>
+                  <SelectItem value="DKI Jakarta">DKI Jakarta</SelectItem>
+                  <SelectItem value="Jawa Barat">Jawa Barat</SelectItem>
+                  <SelectItem value="Jawa Tengah">Jawa Tengah</SelectItem>
+                  <SelectItem value="Jawa Timur">Jawa Timur</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -147,9 +179,10 @@ export default function AddRumahNegaraPage() {
           </div>
         </CardContent>
       </Card>
+
       {/* Card Location */}
       <Card className="rounded-md p-4">
-        <CardTitle>Location (Optional)</CardTitle>
+        <CardTitle>Lokasi (Optional)</CardTitle>
         <CardContent className="flex flex-col w-full h-full p-0 gap-y-4">
           <div className="flex w-full h-full gap-4">
             <div className="flex flex-col w-full gap-2">
@@ -198,42 +231,40 @@ export default function AddRumahNegaraPage() {
         </CardContent>
       </Card>
 
-      {/* Card Classification */}
+      {/* Classification */}
       <Card className="rounded-md p-4">
         <CardTitle>Klasifikasi</CardTitle>
-        <CardContent className="flex flex-col w-full h-full p-0 gap-y-4">
-          <div className="flex w-full h-full gap-4">
+        <CardContent className="flex flex-col gap-y-4 p-0">
+          <div className="flex w-full gap-4">
             <div className="flex flex-col w-full gap-2">
               <label className="text-sm text-[#969696]">Kondisi *</label>
-              <Select onValueChange={(value) => setCondition(value)}>
+              <Select value={condition} onValueChange={setCondition}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select Condition" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="good">Good</SelectItem>
-                  <SelectItem value="fair">Fair</SelectItem>
-                  <SelectItem value="need-repair">Need Repair</SelectItem>
-                  <SelectItem value="uninhabitable">Uninhabitable</SelectItem>
+                  <SelectItem value="Good">Good</SelectItem>
+                  <SelectItem value="Fair">Fair</SelectItem>
+                  <SelectItem value="Needs Repair">Needs Repair</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="flex flex-col w-full gap-2">
               <label className="text-sm text-[#969696]">Status *</label>
-              <Select onValueChange={(value) => setStatus(value)}>
+              <Select value={status} onValueChange={setStatus}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select Status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="available">Available</SelectItem>
-                  <SelectItem value="occupied">Occupied</SelectItem>
-                  <SelectItem value="maintenance">Maintenance</SelectItem>
+                  <SelectItem value="Available">Available</SelectItem>
+                  <SelectItem value="Occupied">Occupied</SelectItem>
+                  <SelectItem value="Maintenance">Maintenance</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
         </CardContent>
       </Card>
-
       {/* Card Utilities & Documents */}
       <Card className="rounded-md p-4">
         <CardTitle>Utilitas & Dokumen (Optional)</CardTitle>
@@ -263,18 +294,11 @@ export default function AddRumahNegaraPage() {
         </CardContent>
       </Card>
 
-      {/* Card Notes */}
+      {/* Notes */}
       <Card className="rounded-md p-4">
-        <CardTitle>Catatan (Optional)</CardTitle>
-        <CardContent className="flex flex-col w-full h-full p-0 gap-y-2">
-          <Textarea
-            placeholder="Additional notes about the property"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-          />
-          <span className="text-[10px] text-[#969696]">
-            {notes.length}/1000 characters
-          </span>
+        <CardTitle>Catatan</CardTitle>
+        <CardContent className="flex flex-col gap-y-2">
+          <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} />
         </CardContent>
       </Card>
 
@@ -284,11 +308,10 @@ export default function AddRumahNegaraPage() {
           Cancel
         </Button>
         <Button
-          type="submit"
           className="bg-green-500 hover:bg-green-600"
           onClick={handleSave}
         >
-          Simpan
+          Simpan Perubahan
         </Button>
       </div>
     </div>

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -27,67 +27,68 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Plus, MoreVertical } from "lucide-react";
-
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 // Dummy data vehicles
-const dummyVehicles = [
-  {
-    plate: "B 1234 ABC",
-    brand: "Toyota Camry",
-    year: 2020,
-    fuel: "Gasoline",
-    odometer: 45000,
-    condition: "Good",
-    status: "Available",
-  },
-  {
-    plate: "B 3456 JKL",
-    brand: "Isuzu D-Max",
-    year: 2021,
-    fuel: "Diesel",
-    odometer: 28000,
-    condition: "Good",
-    status: "Available",
-  },
-  {
-    plate: "B 5678 DEF",
-    brand: "Honda Civic",
-    year: 2019,
-    fuel: "Gasoline",
-    odometer: 62000,
-    condition: "Good",
-    status: "In Use",
-  },
-  {
-    plate: "B 7890 MNO",
-    brand: "Suzuki Ertiga",
-    year: 2017,
-    fuel: "Gasoline",
-    odometer: 95000,
-    condition: "Needs Repair",
-    status: "Inactive",
-  },
-  {
-    plate: "B 9012 GHI",
-    brand: "Mitsubishi Pajero Sport",
-    year: 2018,
-    fuel: "Diesel",
-    odometer: 85000,
-    condition: "Fair",
-    status: "Maintenance",
-  },
-];
+// Dummy data 20 kendaraan dinas
+const dummyVehicles = Array.from({ length: 20 }, (_, i) => ({
+  plate: `B ${1000 + i} ${["ABC", "DEF", "GHI", "JKL", "MNO"][i % 5]}`,
+  brand:
+    i < 5
+      ? `Toyota Fortuner ${i + 1}`
+      : i < 10
+      ? `Mitsubishi Pajero ${i + 1}`
+      : i < 15
+      ? `Honda CR-V ${i + 1}`
+      : `Suzuki Ertiga ${i + 1}`,
+  year: 2010 + (i % 15), // tahun 2010–2024
+  fuel: i % 2 === 0 ? "Gasoline" : "Diesel",
+  odometer: (i + 1) * 5000, // jarak tempuh naik tiap kendaraan
+  condition:
+    i % 4 === 0
+      ? "Good"
+      : i % 4 === 1
+      ? "Fair"
+      : i % 4 === 2
+      ? "Needs-Repair"
+      : "Good",
+  status: i % 3 === 0 ? "Available" : i % 3 === 1 ? "In Use" : "Maintenance",
+}));
 
 export default function KendaraanDinasPage() {
   const [search, setSearch] = useState("");
   const [filterCondition, setFilterCondition] = useState("all");
   const [filterFuel, setFilterFuel] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
-  const [yearFrom, setYearFrom] = useState("");
-  const [yearTo, setYearTo] = useState("");
+  const [page, setPage] = useState(1);
+  const [vehicle, setVehicle] = useState(dummyVehicles); // mulai dari dummy
+  const searchParams = useSearchParams();
 
   const router = useRouter();
+  // Fungsi Delete
+  const handleDelete = (plate: any) => {
+    setVehicle((prev) => prev.filter((vehicle) => vehicle.plate !== plate));
+  };
 
-  const filteredData = dummyVehicles.filter((vehicle) => {
+  // Membaca Data Baru
+  React.useEffect(() => {
+    const newVehicleParam = searchParams.get("newVehicle");
+    if (newVehicleParam) {
+      try {
+        const newVehicle = JSON.parse(decodeURIComponent(newVehicleParam));
+        setVehicle((prev) => [...prev, newVehicle]);
+      } catch (e) {
+        console.error("Failed to parse Vehicle:", e);
+      }
+    }
+  }, [searchParams]);
+  const filteredData = vehicle.filter((vehicle) => {
     const matchesSearch =
       search === "" ||
       vehicle.plate.toLowerCase().includes(search.toLowerCase()) ||
@@ -100,20 +101,15 @@ export default function KendaraanDinasPage() {
 
     const matchesStatus =
       filterStatus === "all" || vehicle.status === filterStatus;
-
-    const matchesYearFrom =
-      yearFrom === "" || vehicle.year >= parseInt(yearFrom);
-    const matchesYearTo = yearTo === "" || vehicle.year <= parseInt(yearTo);
-
-    return (
-      matchesSearch &&
-      matchesCondition &&
-      matchesFuel &&
-      matchesStatus &&
-      matchesYearFrom &&
-      matchesYearTo
-    );
+    return matchesSearch && matchesCondition && matchesFuel && matchesStatus;
   });
+
+  const itemsPerPage = 15;
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const paginatedData = filteredData.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
+  );
 
   return (
     <div className="space-y-6 pt-3">
@@ -161,21 +157,6 @@ export default function KendaraanDinasPage() {
                 <SelectItem value="Maintenance">Maintenance</SelectItem>
               </SelectContent>
             </Select>
-            <Input
-              placeholder="From"
-              type="number"
-              value={yearFrom}
-              onChange={(e) => setYearFrom(e.target.value)}
-              className="w-[100px]"
-            />
-            <span className="text-gray-500">to</span>
-            <Input
-              placeholder="To"
-              type="number"
-              value={yearTo}
-              onChange={(e) => setYearTo(e.target.value)}
-              className="w-[100px]"
-            />
           </div>
 
           {/* Button */}
@@ -204,7 +185,7 @@ export default function KendaraanDinasPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredData.map((vehicle) => (
+              {paginatedData.map((vehicle) => (
                 <TableRow key={vehicle.plate}>
                   <TableCell className="font-semibold text-green-600">
                     {vehicle.plate}
@@ -253,13 +234,28 @@ export default function KendaraanDinasPage() {
                       <DropdownMenuContent side="left" align="start">
                         <DropdownMenuItem
                           onClick={() =>
-                            router.push(`/kendaraan-dinas/${vehicle.plate}`)
+                            router.push(
+                              `/kendaraan-dinas/${encodeURIComponent(
+                                vehicle.plate
+                              )}`
+                            )
                           }
                         >
                           View
                         </DropdownMenuItem>
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem className="text-red-600">
+                        <DropdownMenuItem
+                          onClick={() =>
+                            router.push(
+                              `/kendaraan-dinas/${vehicle.plate}/edit`
+                            )
+                          }
+                        >
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="text-red-600"
+                          onClick={() => handleDelete(vehicle.plate)}
+                        >
                           Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -269,6 +265,37 @@ export default function KendaraanDinasPage() {
               ))}
             </TableBody>
           </Table>
+
+          <div className="mt-4 flex ">
+            <Pagination className="flex w-full justify-end">
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    aria-disabled={page === 1}
+                    className="cursor-pointer"
+                  />
+                </PaginationItem>
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <PaginationItem key={i}>
+                    <PaginationLink
+                      isActive={page === i + 1}
+                      onClick={() => setPage(i + 1)}
+                    >
+                      {i + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                <PaginationItem>
+                  <PaginationNext
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    aria-disabled={page === totalPages}
+                    className="cursor-pointer"
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
         </CardContent>
       </Card>
     </div>

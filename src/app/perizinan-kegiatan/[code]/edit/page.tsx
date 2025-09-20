@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,31 +11,38 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
-import {
-  ArrowLeft,
-  MapPin,
-  Settings,
-  FileText,
-  DollarSign,
-  FileUp,
-} from "lucide-react";
+import { ArrowLeft, FileUp } from "lucide-react";
+const dummyEvents = Array.from({ length: 20 }, (_, i) => {
+  const statuses = ["Diajukan", "Draf", "Disetujui", "Selesai", "Ditolak"];
+  const categories = [
+    "Rapat • Sumber Daya Manusia",
+    "Penyuluhan • Hubungan Masyarakat",
+    "Pelatihan • Divisi Urusan Hukum",
+    "Upacara • Bagian Protokol",
+    "Seminar • Penelitian dan Pengembangan",
+  ];
+  const locations = ["Daring", "Luring", "Hibrid"];
 
-export default function AddActivityPage() {
+  return {
+    code: `EV-2025-${String(i + 1).padStart(3, "0")}`,
+    title: `Kegiatan ${i + 1}`,
+    category: categories[i % categories.length],
+    schedule: `${10 + (i % 20)} Mar 09.00 → 12.00`,
+    location: locations[i % locations.length],
+    status: statuses[i % statuses.length],
+  };
+});
+export default function EditActivityPage() {
   const kakRef = useRef<HTMLInputElement | null>(null);
   const agendaRef = useRef<HTMLInputElement | null>(null);
   const lainnyaRef = useRef<HTMLInputElement | null>(null);
 
   const [notes, setNotes] = useState("");
-  const [code, setCode] = useState("");
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [location, setLocation] = useState("");
-  const [status, setStatus] = useState(""); // misalnya status kegiatan
 
+  const params = useParams();
+  const { code } = useParams();
   const router = useRouter();
 
   const handleUploadClick = (ref: React.RefObject<HTMLInputElement | null>) => {
@@ -51,6 +58,31 @@ export default function AddActivityPage() {
     }
   };
 
+  const [kegiatan, setKegiatan] = useState<any>(null);
+
+  useEffect(() => {
+    if (code) {
+      const found = dummyEvents.find((h) => h.code === code);
+      if (found) setKegiatan(found);
+    }
+  }, [code]);
+
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [location, setLocation] = useState("");
+  const [status, setStatus] = useState("");
+
+  useEffect(() => {
+    if (kegiatan) {
+      setTitle(kegiatan.title);
+      setCategory(kegiatan.category);
+      setLocation(kegiatan.location);
+      setStatus(kegiatan.status);
+    }
+  }, [kegiatan]);
+
   // SIMPAN DATA
   const handleSave = () => {
     const newEvent = {
@@ -63,10 +95,9 @@ export default function AddActivityPage() {
       status,
     };
 
-    router.push(
-      `/perizinan-kegiatan?newEvent=${encodeURIComponent(JSON.stringify(newEvent))}`
-    );
+    router.push(`/perizinan-kegiatan`);
   };
+  if (!kegiatan) return <p className="p-4">Loading...</p>;
 
   return (
     <div className="space-y-6 pb-10">
@@ -80,7 +111,7 @@ export default function AddActivityPage() {
           <ArrowLeft className="h-4 w-4" />
           Kembali
         </Button>
-        <h1 className="text-xl font-semibold">Kegiatan Baru</h1>
+        <h1 className="text-xl font-semibold">Edit Kegiatan {kegiatan.code}</h1>
       </div>
 
       {/* Card Dasar */}
@@ -91,10 +122,7 @@ export default function AddActivityPage() {
         <CardContent className="flex flex-col gap-4 p-0">
           <div>
             <label className="text-sm ">Kode Kegiatan</label>
-            <Input
-              placeholder="EV-2025-497"
-              onChange={(e) => setCode(e.target.value)}
-            />
+            <Input value={kegiatan.kode} disabled />
             <p className="text-xs text-gray-400">
               Format: EV-YYYY-NNN (dibuat otomatis)
             </p>
@@ -104,13 +132,13 @@ export default function AddActivityPage() {
             <div className="flex w-full flex-col">
               <label className="text-sm  ">Judul *</label>
               <Input
-                placeholder="Judul kegiatan (5-150 karakter)"
+              value={kegiatan.title}
                 onChange={(e) => setTitle(e.target.value)}
               />
             </div>
             <div className="flex flex-col w-full">
               <label className="text-sm  ">Kategori *</label>
-              <Select onValueChange={(value) => setCategory(value)}>
+              <Select value={kegiatan.category} onValueChange={(value) => setCategory(value)}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Pilih kategori" />
                 </SelectTrigger>
@@ -168,7 +196,7 @@ export default function AddActivityPage() {
 
           <div className="flex flex-col w-full">
             <label className="text-sm  ">Jenis Lokasi *</label>
-            <Select onValueChange={(value) =>setLocation(value)}>
+            <Select onValueChange={(value) => setLocation(value)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Pilih jenis lokasi" />
               </SelectTrigger>
@@ -210,9 +238,7 @@ export default function AddActivityPage() {
             </div>
 
             <div>
-              <label className="text-sm ">
-                Alamat Lengkap (opsional)
-              </label>
+              <label className="text-sm ">Alamat Lengkap (opsional)</label>
               <Input
                 placeholder="Masukkan alamat lengkap gedung"
                 className="bg-white text-black border border-gray-300"
@@ -279,7 +305,7 @@ export default function AddActivityPage() {
 
           <div className="gap-4">
             <label className="flex items-center gap-1 text-sm  w-full">
-            Catatan Anggaran
+              Catatan Anggaran
             </label>
             <Textarea placeholder="Pertimbangan anggaran, biaya, sumber dana (opsional)" />
             <p className="text-xs text-gray-400">0/500 karakter</p>
