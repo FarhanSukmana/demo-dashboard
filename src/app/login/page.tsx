@@ -8,16 +8,6 @@ import { Label } from "@/components/ui/label";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import Cookies from "js-cookie";
 
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogAction,
-} from "@/components/ui/alert-dialog";
-
 import logo from "../../../public/assets/img/kemenkumham.png";
 
 export default function Page() {
@@ -25,8 +15,6 @@ export default function Page() {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ identifier: "", password: "" });
   const [error, setError] = useState("");
-  const [open, setOpen] = useState(false);
-  const [username, setUsername] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -45,12 +33,9 @@ export default function Page() {
 
     const name = form.identifier.split("@")[0];
     Cookies.set("username", name, { expires: 7 }); // simpan 7 hari
-    setUsername(name);
 
-    setTimeout(() => {
-      setLoading(false);
-      setOpen(true); // buka dialog berhasil
-    }, 1000);
+    // langsung redirect ke dashboard
+    router.push("/");
   };
 
   return (
@@ -111,27 +96,6 @@ export default function Page() {
           </CardContent>
         </Card>
       </div>
-
-      {/* Dialog sukses login */}
-      <AlertDialog open={open} onOpenChange={setOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Login Berhasil</AlertDialogTitle>
-            <AlertDialogDescription>
-              Selamat Datang
-              <br /> Anda berhasil masuk ke sistem.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogAction
-              onClick={() => router.push("/")}
-              className="bg-blue-600 text-white hover:bg-blue-700"
-            >
-              Pergi ke Dashboard
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 }
