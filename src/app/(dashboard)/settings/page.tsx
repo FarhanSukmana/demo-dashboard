@@ -13,11 +13,11 @@ export default function SettingsPage() {
         <CardContent className="flex flex-col gap-4 p-0">
           <div>
             <label className="text-sm ">Nama Lengkap</label>
-            <Input placeholder="Siti Rahma" />
+            <Input placeholder="Nama Lengkap" />
           </div>
           <div>
             <label className="text-sm ">Email</label>
-            <Input placeholder="siti.rahma@kemenkumham.go.id" />
+            <Input placeholder="email@gov.id" />
           </div>
           <div>
             <label className="text-sm ">Sektor</label>
