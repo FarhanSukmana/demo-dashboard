@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import AppSidebar from "@/components/AppSidebar";
-import Navbar from "@/components/Navbar";
-import { ThemeProvider } from "@/components/theme-provider";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { cookies } from "next/headers";
-import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,40 +14,23 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Demo Dashboard",
-  description: "Demo Dashboard ",
+  description: "Demo Dashboard",
   icons: {
-    icon: "/globe.svg", // file ada di public/logo.png
+    icon: "/globe.svg",
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
-  const cookieStore = await cookies();
-  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
-
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <SidebarProvider defaultOpen={defaultOpen}>
-            <AppSidebar />
-            <div className="flex flex-col w-full h-full pl-4">
-              <Navbar />
-              <div className="py-4 pr-4">{children}</div>
-            </div>
-            <Toaster position="top-right" richColors />
-          </SidebarProvider>
-        </ThemeProvider>
+        {children}
       </body>
     </html>
   );
